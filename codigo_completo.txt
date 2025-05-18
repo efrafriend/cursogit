@@ -1,0 +1,1082 @@
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Domain\Database\dbconfig.js ---
+
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const database = {
+    connectionLimit: Number(process.env.DB_CONNECTIONLIMIT),
+    host: process.env.DB_HOST || '',
+    port: Number(process.env.DB_PORT),
+    user: process.env.DB_USER || '',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_DATABASE || ''
+};
+exports.default = database;
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Domain\Database\dbconfig.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Domain\Database\dbPool.js ---
+
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.pool = void 0;
+const promise_1 = __importDefault(require("mysql2/promise"));
+const dbconfig_1 = __importDefault(require("./dbconfig"));
+const pool = function (sql, params) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const pool = promise_1.default.createPool(dbconfig_1.default);
+            const connection = yield pool.getConnection();
+            let res = yield connection.query(sql, params);
+            connection.release();
+            return res;
+        }
+        catch (err) {
+            console.log(err);
+        }
+    });
+};
+exports.pool = pool;
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Domain\Database\dbPool.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Domain\commitTransaction.js ---
+
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.commitTransaction = commitTransaction;
+const soap_1 = require("../Infraestructure/soap");
+function commitTransactionArgs(MGAgentId, argsCommitTransactionRequest) {
+    return Object.assign(Object.assign({}, (0, soap_1.generateGeneralArgs)(MGAgentId)), argsCommitTransactionRequest);
+}
+function commitTransaction(MGAgentId, argsCommitTransactionRequest, context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let order = null;
+        let errorFound = null;
+        let commitTransactionRequest = commitTransactionArgs(MGAgentId, argsCommitTransactionRequest);
+        let client = yield (0, soap_1.createSoapClientAsync)(context);
+        let result = yield client.commitTransactionAsync(commitTransactionRequest);
+        order = result !== null && result !== void 0 ? result : null;
+        return {
+            status: errorFound ? "ERROR" : "OK",
+            order: order,
+            error: errorFound,
+        };
+    });
+}
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Domain\commitTransaction.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Domain\Database.js ---
+
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.guardar_bitacora_mg = void 0;
+const dbPool_1 = require("./Database/dbPool");
+/**
+ * Función que guarda las inteacciones con el
+ * @param cod_empleado
+ * @param tipo
+ * @param soapxml
+ * @returns
+ */
+const guardar_bitacora_mg = function (tipo, soapxml, context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let params = [
+            context.cod_empresa,
+            context.clave_cobro,
+            context.endpoint,
+            tipo,
+            soapxml
+        ];
+        console.log(params);
+        var resp = yield (0, dbPool_1.pool)("call insertar_bitacora_mg(?)", [params]);
+        return resp;
+    });
+};
+exports.guardar_bitacora_mg = guardar_bitacora_mg;
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Domain\Database.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Domain\getFieldsForProduct.js ---
+
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getFieldsForProduct = getFieldsForProduct;
+const soap_1 = require("../Infraestructure/soap");
+function generateGetFieldsForProductArgs(MGAgentId, argsGetFieldsForProductRequest) {
+    return Object.assign(Object.assign({}, (0, soap_1.generateGeneralArgs)(MGAgentId)), { receiveCountry: argsGetFieldsForProductRequest.receiveCountry, thirdPartyType: argsGetFieldsForProductRequest.thirdPartyType, receiveCurrency: argsGetFieldsForProductRequest.receiveCurrency, amount: argsGetFieldsForProductRequest.amount, productType: argsGetFieldsForProductRequest.productType, consumerId: argsGetFieldsForProductRequest.consumerId, formFreeStaging: argsGetFieldsForProductRequest.formFreeStaging, mgiTransactionSessionID: argsGetFieldsForProductRequest.mgiTransactionSessionID });
+}
+function getFieldsForProduct(MGAgentId, argsGetFieldsForProductRequest, context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let fields = null;
+        let errorFound = null;
+        let getFieldsForProductRequest = generateGetFieldsForProductArgs(MGAgentId, argsGetFieldsForProductRequest);
+        let client = yield (0, soap_1.createSoapClientAsync)(context);
+        let result = yield client.getFieldsForProductAsync(getFieldsForProductRequest);
+        fields = result !== null && result !== void 0 ? result : null;
+        return {
+            status: errorFound ? "ERROR" : "OK",
+            error: errorFound !== null && errorFound !== void 0 ? errorFound : "",
+            fields: fields,
+        };
+    });
+}
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Domain\getFieldsForProduct.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Infraestructure\IContext.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Infraestructure\IContext.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Infraestructure\soap.js ---
+
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createSoapClientAsync = createSoapClientAsync;
+exports.generateGeneralArgs = generateGeneralArgs;
+const Database_1 = require("../Domain/Database");
+const dates_1 = require("../Utils/dates");
+const logger_1 = require("../Utils/logger");
+const soap = require("soap");
+const url = "https://extws.moneygram.com/extws/AgentConnectWSDL?Version=1512";
+const file = "./src/Moneygram/WSDL/AgentConnectWSDL_1512.wsdl";
+function generateGeneralArgs(MGagentID) {
+    let args = {
+        agentID: MGagentID, // 43711291,
+        agentSequence: process.env.AGENTSEQUENCE, // 23,
+        token: process.env.TOKEN, // "TEST",
+        timeStamp: dates_1.DateTimeStamp.nowWithTimeStampMoneyGram(),
+        apiVersion: process.env.APIVERSION, // 1512,
+        clientSoftwareVersion: process.env.CLIENTSOFTWAREVERSION, // 1512,
+        channelType: process.env.CHANNELTYPE, // "LOCATION",
+        targetAudience: process.env.TARGETAUDIENCE, // "AGENT_FACING"
+    };
+    // // OTRO AGENTE
+    // args = {
+    //   agentID: "43815045", // 43711291,
+    //   agentSequence: "5", // 23,
+    //   token: process.env.TOKEN, // "TEST",
+    //   timeStamp: DateTimeStamp.nowWithTimeStampMoneyGram(),
+    //   apiVersion: process.env.APIVERSION, // 1512,
+    //   clientSoftwareVersion: process.env.CLIENTSOFTWAREVERSION, // 1512,
+    //   channelType: process.env.CHANNELTYPE, // "LOCATION",
+    //   targetAudience: process.env.TARGETAUDIENCE, // "AGENT_FACING"
+    // };
+    logger_1.Logger.infoJSON(args);
+    return args;
+}
+function createSoapClientAsync(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let client = yield soap.createClientAsync(file !== null && file !== void 0 ? file : url);
+        client.on('request', (xml) => {
+            logger_1.Logger.info("Request: " + xml);
+            logger_1.Logger.info("cod_empresa: " + context.cod_empresa);
+            logger_1.Logger.info("clave_cobro: " + context.clave_cobro);
+            (0, Database_1.guardar_bitacora_mg)('REQUEST', xml, context);
+        });
+        client.on('response', (xml) => {
+            logger_1.Logger.info("Response: " + xml);
+            logger_1.Logger.info("cod_empresa: " + context.cod_empresa);
+            logger_1.Logger.info("clave_cobro: " + context.clave_cobro);
+            (0, Database_1.guardar_bitacora_mg)("RESPONSE", xml, context);
+        });
+        client.on('soapError', (err, eid) => {
+            logger_1.Logger.info("cod_empresa: " + context.cod_empresa);
+            logger_1.Logger.info("clave_cobro: " + context.clave_cobro);
+            logger_1.Logger.error("SOAP Error: " +
+                err.toString().replaceAll("Error: soapenv:Server: undefined: ", ''));
+        });
+        if (client == null) {
+            logger_1.Logger.error("Error creating SOAP client");
+            logger_1.Logger.error(client);
+            throw new Error("Error creating SOAP client");
+        }
+        return client;
+    });
+}
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Infraestructure\soap.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\api\receiveReversal.js ---
+
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.receiveReversal = receiveReversal;
+const soap_1 = require("../../Infraestructure/soap");
+function receiveReversalArgs(MGAgentID, argsReceiveReversalRequest) {
+    return Object.assign(Object.assign({}, (0, soap_1.generateGeneralArgs)(MGAgentID)), argsReceiveReversalRequest);
+}
+function receiveReversal(MGAgentID, argsReceiveReversalRequest, context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let order = null;
+        let errorFound = null;
+        let receiveReversalRequest = receiveReversalArgs(MGAgentID, argsReceiveReversalRequest);
+        let client = yield (0, soap_1.createSoapClientAsync)(context);
+        console.log(" **********************  receiveReversalAsync   ************************** ");
+        console.log(receiveReversalRequest);
+        console.log(" **********************  receiveReversalAsync   ************************** ");
+        let result = yield client.receiveReversalAsync(receiveReversalRequest);
+        order = result !== null && result !== void 0 ? result : null;
+        return {
+            status: errorFound ? "ERROR" : "OK",
+            order: order,
+            error: errorFound,
+        };
+    });
+}
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\api\receiveReversal.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\api\receiveValidation.js ---
+
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.receiveValidation = receiveValidation;
+const soap_1 = require("../../Infraestructure/soap");
+const logger_1 = require("../../Utils/logger");
+const objectManipulation_1 = require("../../Utils/objectManipulation");
+function generateReceiveValidationArgs(MGAgentID, argsReceiveValidationRequest) {
+    let args = Object.assign(Object.assign({}, (0, soap_1.generateGeneralArgs)(MGAgentID)), argsReceiveValidationRequest);
+    logger_1.Logger.info(JSON.stringify(args));
+    (0, objectManipulation_1.clearUndefinedProperties)(args);
+    logger_1.Logger.info(JSON.stringify(args));
+    return args;
+}
+function receiveValidation(MGAgentID, argsReceiveValidationRequest, context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let fields = null;
+        let errorFound = null;
+        let recevieValidationRequest = generateReceiveValidationArgs(MGAgentID, argsReceiveValidationRequest);
+        let client = yield (0, soap_1.createSoapClientAsync)(context);
+        console.log(" **********************  receiveValidationAsync   ************************** ");
+        console.log(recevieValidationRequest);
+        console.log(" **********************  receiveValidationAsync   ************************** ");
+        let result = yield client.receiveValidationAsync(recevieValidationRequest);
+        fields = result !== null && result !== void 0 ? result : null;
+        return {
+            status: errorFound ? "ERROR" : "OK",
+            fields: fields,
+            error: errorFound,
+        };
+    });
+}
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\api\receiveValidation.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\api\referenceNumber.js ---
+
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.referenceNumber = referenceNumber;
+const soap_1 = require("../../Infraestructure/soap");
+function generateReferenceNumberArgs(MGAgentId, referenceNumber) {
+    return Object.assign(Object.assign({}, (0, soap_1.generateGeneralArgs)(MGAgentId)), { referenceNumber: referenceNumber });
+}
+function referenceNumber(MGAgentId, referenceNumber, context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let order = null;
+        let errorFound = null;
+        let referenceNumberRequest = generateReferenceNumberArgs(MGAgentId, referenceNumber);
+        let client = yield (0, soap_1.createSoapClientAsync)(context);
+        let result = yield client.referenceNumberAsync(referenceNumberRequest);
+        order = result !== null && result !== void 0 ? result : null;
+        return {
+            status: errorFound ? "ERROR" : "OK",
+            order: order,
+            error: errorFound,
+        };
+    });
+}
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\api\referenceNumber.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\Domain\Request\ICommitTransactionRequest.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\Domain\Request\ICommitTransactionRequest.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\Domain\Request\IIReceiveReversalRequest.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.receiveReversalReasonEnum = void 0;
+var receiveReversalReasonEnum;
+(function (receiveReversalReasonEnum) {
+    receiveReversalReasonEnum["WANTS_CASH"] = "WANTS_CASH";
+    receiveReversalReasonEnum["WORNG_TX"] = "WORNG_TX";
+    receiveReversalReasonEnum["OUT_OF_CHECKS"] = "OUT_OF_CHECKS";
+    receiveReversalReasonEnum["ID_PROBLEM"] = "ID_PROBLEM";
+})(receiveReversalReasonEnum || (exports.receiveReversalReasonEnum = receiveReversalReasonEnum = {}));
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\Domain\Request\IIReceiveReversalRequest.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\Domain\Request\IReceiveValidationRequest.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\Domain\Request\IReceiveValidationRequest.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\index.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.receiveValidation = exports.getFieldsForProduct = exports.referenceNumber = void 0;
+const referenceNumber_1 = require("./api/referenceNumber");
+Object.defineProperty(exports, "referenceNumber", { enumerable: true, get: function () { return referenceNumber_1.referenceNumber; } });
+const getFieldsForProduct_1 = require("../Domain/getFieldsForProduct");
+Object.defineProperty(exports, "getFieldsForProduct", { enumerable: true, get: function () { return getFieldsForProduct_1.getFieldsForProduct; } });
+const receiveValidation_1 = require("./api/receiveValidation");
+Object.defineProperty(exports, "receiveValidation", { enumerable: true, get: function () { return receiveValidation_1.receiveValidation; } });
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Receive\index.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\api\feeLookup.js ---
+
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.feeLookup = feeLookup;
+const soap_1 = require("../../Infraestructure/soap");
+function feeLookupArgs(MGagentID, argsFeeLookupRequest) {
+    return Object.assign(Object.assign({}, (0, soap_1.generateGeneralArgs)(MGagentID)), argsFeeLookupRequest);
+}
+function feeLookup(MGagentID, argsfeeLookupRequest, context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let order = null;
+        let errorFound = null;
+        let feeLookupRequest = feeLookupArgs(MGagentID, argsfeeLookupRequest);
+        let client = yield (0, soap_1.createSoapClientAsync)(context);
+        let result = yield client.feeLookupAsync(feeLookupRequest);
+        order = result !== null && result !== void 0 ? result : null;
+        return {
+            status: errorFound ? "ERROR" : "OK",
+            order: order,
+            error: errorFound,
+        };
+    });
+}
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\api\feeLookup.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\api\moneyGramConsumerLookup.js ---
+
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.moneyGramConsumerLookup = moneyGramConsumerLookup;
+const soap_1 = require("../../Infraestructure/soap");
+function moneyGramConsumerLookupArgs(MGagentID, argsmoneyGramConsumerLookupRequest) {
+    return Object.assign(Object.assign({}, (0, soap_1.generateGeneralArgs)(MGagentID)), argsmoneyGramConsumerLookupRequest);
+}
+function moneyGramConsumerLookup(MGagentID, argsMoneyGramConsumerLookupRequest, context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let order = null;
+        let errorFound = null;
+        let moneyGramConsumerLookupRequest = moneyGramConsumerLookupArgs(MGagentID, argsMoneyGramConsumerLookupRequest);
+        let client = yield (0, soap_1.createSoapClientAsync)(context);
+        let result = yield client.moneyGramConsumerLookupAsync(moneyGramConsumerLookupRequest);
+        order = result !== null && result !== void 0 ? result : null;
+        return {
+            status: errorFound ? "ERROR" : "OK",
+            order: order,
+            error: errorFound,
+        };
+    });
+}
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\api\moneyGramConsumerLookup.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\api\sendValidation.js ---
+
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sendValidation = sendValidation;
+const soap_1 = require("../../Infraestructure/soap");
+function sendValidationArgs(MGagentID, argssendValidationRequest) {
+    return Object.assign(Object.assign({}, (0, soap_1.generateGeneralArgs)(MGagentID)), argssendValidationRequest);
+}
+function sendValidation(MGagentID, argsSendValidationRequest, context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let order = null;
+        let errorFound = null;
+        let sendValidationRequest = sendValidationArgs(MGagentID, argsSendValidationRequest);
+        let client = yield (0, soap_1.createSoapClientAsync)(context);
+        let result = yield client.sendValidationAsync(sendValidationRequest);
+        order = result !== null && result !== void 0 ? result : null;
+        return {
+            status: errorFound ? "ERROR" : "OK",
+            order: order,
+            error: errorFound,
+        };
+    });
+}
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\api\sendValidation.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\Domain\Request\IFeeLookupRequest.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\Domain\Request\IFeeLookupRequest.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\Domain\Request\IMoneyGramConsumerLookupRequest.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\Domain\Request\IMoneyGramConsumerLookupRequest.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\Domain\Request\ISendValidationRequest.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\Domain\Request\ISendValidationRequest.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\index.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getFieldsForProduct = exports.feeLookup = exports.moneyGramConsumerLookup = void 0;
+const getFieldsForProduct_1 = require("../Domain/getFieldsForProduct");
+Object.defineProperty(exports, "getFieldsForProduct", { enumerable: true, get: function () { return getFieldsForProduct_1.getFieldsForProduct; } });
+const feeLookup_1 = require("./api/feeLookup");
+Object.defineProperty(exports, "feeLookup", { enumerable: true, get: function () { return feeLookup_1.feeLookup; } });
+const moneyGramConsumerLookup_1 = require("./api/moneyGramConsumerLookup");
+Object.defineProperty(exports, "moneyGramConsumerLookup", { enumerable: true, get: function () { return moneyGramConsumerLookup_1.moneyGramConsumerLookup; } });
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Send\index.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\test\Utils\Logger.spec.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const logger_1 = require("../../Utils/logger");
+logger_1.Logger.write("Utilizando el write");
+logger_1.Logger.info("Utilizando info");
+logger_1.Logger.debug("Utilizando debug");
+logger_1.Logger.error("Utilizando error");
+/*
+let resReferenceNumber:any = {
+    referenceNumber: "1234567890",
+    amount: {
+        amount: 100,
+        currency: "USD"
+    };
+
+console.log("****************************************************************************************************");
+Logger.writeJSON(resReferenceNumber);
+console.log("****************************************************************************************************");
+Logger.infoJSON(resReferenceNumber);
+console.log("****************************************************************************************************");
+Logger.debugJSON(resReferenceNumber);
+console.log("****************************************************************************************************");
+Logger.errorJSON(resReferenceNumber);
+console.log("****************************************************************************************************");
+*/ 
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\test\Utils\Logger.spec.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Utils\dates.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DateTimeStamp = void 0;
+const { DateTime } = require("luxon");
+class DateTimeStamp {
+    static now() {
+        return new Date().getTime();
+    }
+    static nowWithTimeZone() {
+        return DateTime.now().setZone("America/Los_Angeles");
+    }
+    static nowWithTimeStampMoneyGram() {
+        // const now = new Date();
+        // const year = now.getUTCFullYear().toString().padStart(4, "0");
+        // const month = (now.getUTCMonth() + 1).toString().padStart(2, "0");
+        // const day = now.getUTCDate().toString().padStart(2, "0");
+        // const hours = now.getUTCHours().toString().padStart(2, "0");
+        // const minutes = now.getUTCMinutes().toString().padStart(2, "0");
+        // const seconds = now.getUTCSeconds().toString().padStart(2, "0");
+        // const milliseconds = now.getUTCMilliseconds().toString().padStart(3, "0");
+        // const timezoneOffset = now.getTimezoneOffset();
+        // const timezoneHours = Math.floor(Math.abs(timezoneOffset / 60))
+        //   .toString()
+        //   .padStart(2, "0");
+        // const timezoneMinutes = Math.abs(timezoneOffset % 60)
+        //   .toString()
+        //   .padStart(2, "0");
+        // const timezoneSign = timezoneOffset > 0 ? "-" : "+";
+        // const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}${timezoneSign}${timezoneHours}:${timezoneMinutes}`;
+        const formattedDate = DateTime.now().setZone("America/Panama").toISO();
+        console.log(" ****** nowWithTimeStampMoneyGram *****");
+        console.log(formattedDate);
+        console.log(" ****** nowWithTimeStampMoneyGram *****");
+        return formattedDate;
+    }
+    static nowUTCWithTimeZone() {
+        return new Date().toUTCString();
+    }
+    static nowUTCWithTimeZoneWithDash() {
+        return new Date().toUTCString().replace(/,/g, "");
+    }
+    static toISOString() {
+        return new Date().toISOString();
+    }
+    static toISOStringWithTimeZone() {
+        return new Date().toISOString().replace(/T/, " ").replace(/\..+/, "");
+    }
+    static toISOStringWithTimeZoneWithZ() {
+        return new Date().toISOString().replace(/T/, " ").replace(/\..+/, "Z");
+    }
+    static toISOStringWithTimeZoneWithZWithDash() {
+        return new Date()
+            .toISOString()
+            .replace(/T/, " ")
+            .replace(/\..+/, "Z")
+            .replace(/-/g, "");
+    }
+    static toISOStringWithTimeZoneWithZWithDashWithColon() {
+        return new Date()
+            .toISOString()
+            .replace(/T/, " ")
+            .replace(/\..+/, "Z")
+            .replace(/-/g, "")
+            .replace(/:/g, "");
+    }
+    static toISOStringWithTimeZoneWithZWithDashWithColonWithDot() {
+        return new Date()
+            .toISOString()
+            .replace(/T/, " ")
+            .replace(/\..+/, "Z")
+            .replace(/-/g, "")
+            .replace(/:/g, "")
+            .replace(/\./g, "");
+    }
+    static toISOStringWithTimeZoneWithZWithDashWithColonWithDotWithPlus() {
+        return new Date()
+            .toISOString()
+            .replace(/T/, " ")
+            .replace(/\..+/, "Z")
+            .replace(/-/g, "")
+            .replace(/:/g, "")
+            .replace(/\./g, "")
+            .replace(/\+/g, "");
+    }
+    static toISOStringWithTimeZoneWithZWithDashWithColonWithDotWithPlusWithMinus() {
+        return new Date()
+            .toISOString()
+            .replace(/T/, " ")
+            .replace(/\..+/, "Z")
+            .replace(/-/g, "")
+            .replace(/:/g, "")
+            .replace(/\./g, "")
+            .replace(/\+/g, "")
+            .replace(/-/g, "");
+    }
+}
+exports.DateTimeStamp = DateTimeStamp;
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Utils\dates.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Utils\errorHandler.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.handleErrorToClient = handleErrorToClient;
+function handleErrorToClient(error) {
+    var _a;
+    if (error.toString().includes("Error: soapenv:Server: undefined: ")) {
+        let errorMessage = error.toString().replaceAll("Error: soapenv:Server: undefined: ", "");
+        return JSON.parse(errorMessage);
+    }
+    return (_a = error.response.data) !== null && _a !== void 0 ? _a : error;
+}
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Utils\errorHandler.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Utils\getContext.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getContext = getContext;
+function getContext(req) {
+    let context = {
+        cod_empresa: req.body.cod_empresa || 1,
+        clave_cobro: req.body.clave_cobro || 2,
+        endpoint: req._parsedUrl.path || 'N/A'
+    };
+    return context;
+}
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Utils\getContext.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Utils\logger.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Logger = void 0;
+class Logger {
+    static write(message) {
+        console.log(`⭐ - ${message}`);
+    }
+    static info(message) {
+        console.log("❕❕❕❕❕❕❕❕❕❕❕❕");
+        console.log(`❕ - ${message}`);
+        console.log("❕❕❕❕❕❕❕❕❕❕❕❕");
+    }
+    static debug(message) {
+        console.log(`🟧 - ${message}`);
+    }
+    static error(message) {
+        console.log(`❌❌❌❌❌❌❌❌❌❌❌`);
+        console.log(`❌ - ${message}`);
+        console.log(`❌❌❌❌❌❌❌❌❌❌❌`);
+    }
+    static writeJSON(obj) {
+        console.log(`⭐ - ${JSON.stringify(obj)}`);
+    }
+    static infoJSON(obj) {
+        console.log(`❕ - ${JSON.stringify(obj)}`);
+    }
+    static debugJSON(obj) {
+        console.log(`🟧 - ${JSON.stringify(obj)}`);
+    }
+    static errorJSON(obj) {
+        console.log(`❌ - ${JSON.stringify(obj)}`);
+    }
+}
+exports.Logger = Logger;
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Utils\logger.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Utils\objectManipulation.js ---
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.clearUndefinedProperties = clearUndefinedProperties;
+/**
+ * Function to remove undefined properties from an object
+ *
+ * @param objeto Object to be cleared of undefined properties
+ * @returns void
+ */
+function clearUndefinedProperties(objeto) {
+    for (var i = 0, keys = Object.keys(objeto), len = keys.length; i < len; i++) {
+        if (typeof objeto[keys[i]] === "undefined") {
+            delete objeto[keys[i]];
+        }
+    }
+}
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\Utils\objectManipulation.js ---
+
+
+--- C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\index.js ---
+
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const Receive_1 = require("./Receive");
+const dates_1 = require("./Utils/dates");
+const errorHandler_1 = require("./Utils/errorHandler");
+const objectManipulation_1 = require("./Utils/objectManipulation");
+const commitTransaction_1 = require("./Domain/commitTransaction");
+const receiveReversal_1 = require("./Receive/api/receiveReversal");
+const IIReceiveReversalRequest_1 = require("./Receive/Domain/Request/IIReceiveReversalRequest");
+const getContext_1 = require("./Utils/getContext");
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 4011;
+var bodyParser = require("body-parser");
+app.use(bodyParser.json()); // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({
+    // to support URL-encoded bodies
+    extended: true,
+}));
+/** HEALTCHECK */
+app.get("/", (req, res) => {
+    res.send("Funcionando!");
+});
+/**
+ * Receives
+ */
+app.post("/referenceNumber", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        //let resReferenceNumber = await referenceNumber("53750350");
+        let context = (0, getContext_1.getContext)(req);
+        //Logger.info(JSON.stringify(req));
+        let resReferenceNumber = yield (0, Receive_1.referenceNumber)(req.body.agentId, req.body.referenceNumber, context);
+        res.send(resReferenceNumber);
+    }
+    catch (error) {
+        res.json((0, errorHandler_1.handleErrorToClient)(error), 400);
+    }
+}));
+app.get("/referenceNumber", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let resReferenceNumber = yield (0, Receive_1.referenceNumber)("43815045", "50193800");
+        res.send(resReferenceNumber);
+    }
+    catch (error) {
+        res.json((0, errorHandler_1.handleErrorToClient)(error), 400);
+    }
+}));
+app.get("/getFieldsForProduct", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let context = (0, getContext_1.getContext)(req);
+        let response = yield (0, Receive_1.getFieldsForProduct)("43711291", {
+            receiveCountry: "USA",
+            thirdPartyType: "NONE",
+            receiveCurrency: "MXN",
+            amount: 1942,
+            productType: "RCV",
+            consumerId: "0",
+            formFreeStaging: false,
+            mgiTransactionSessionID: "4371129123E1743074891441",
+        }, context);
+        res.json(response, 500);
+    }
+    catch (error) {
+        res.json((0, errorHandler_1.handleErrorToClient)(error), 400);
+    }
+}));
+app.post("/getFieldsForProduct", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let context = (0, getContext_1.getContext)(req);
+        let response = yield (0, Receive_1.getFieldsForProduct)(req.body.agentId, {
+            receiveCountry: req.body.receiveCountry,
+            thirdPartyType: req.body.thirdPartyType,
+            receiveCurrency: req.body.receiveCurrency,
+            amount: req.body.amount,
+            productType: req.body.productType,
+            consumerId: req.body.consumerId,
+            formFreeStaging: req.body.formFreeStaging,
+            mgiTransactionSessionID: req.body.mgiTransactionSessionID,
+        }, context);
+        res.send(response);
+    }
+    catch (error) {
+        res.json((0, errorHandler_1.handleErrorToClient)(error), 400);
+    }
+}));
+app.get("/receiveValidation", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let context = (0, getContext_1.getContext)(req);
+        let response = yield (0, Receive_1.receiveValidation)("43711291", {
+            referenceNumber: "53750350",
+            receiveCurrency: "MXN",
+            agentCheckAmount: 1942,
+            receiverAddress: "calle 1",
+            receiverCity: "MEXICO",
+            receiverState: "DF",
+            receiverZipCode: "09209",
+            receiverCountry: "MEX",
+            receiverPhotoIdType: "PAS",
+            receiverPhotoIdNumber: "1312312231",
+            receiverPhotoIdCountry: "MEX",
+            receiverDOB: "1980-01-01",
+            receiverBirthCountry: "MEX",
+            consumerId: 0,
+            receiverPhone: "123123",
+            mgiTransactionSessionID: "4371129123E1743074891441",
+            formFreeStaging: false,
+            receiverPhoneCountryCode: "52",
+        }, context);
+        res.send(response);
+    }
+    catch (error) {
+        res.send((0, errorHandler_1.handleErrorToClient)(error), 400);
+    }
+}));
+app.post("/receiveValidation", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log(' ** receiveValidation ** ');
+        console.log(req.body);
+        console.log(' ** receiveValidation ** ');
+        let context = (0, getContext_1.getContext)(req);
+        let response = yield (0, Receive_1.receiveValidation)(req.body.agentId, {
+            referenceNumber: req.body.referenceNumber,
+            receiveCurrency: req.body.receiveCurrency,
+            agentCheckAmount: req.body.agentCheckAmount,
+            receiverAddress: req.body.receiverAddress,
+            receiverCity: req.body.receiverCity,
+            receiverState: req.body.receiverState,
+            receiverZipCode: req.body.receiverZipCode,
+            receiverCountry: req.body.receiverCountry,
+            receiverPhotoIdType: req.body.receiverPhotoIdType,
+            receiverPhotoIdNumber: req.body.receiverPhotoIdNumber,
+            receiverPhotoIdCountry: req.body.receiverPhotoIdCountry,
+            receiverDOB: req.body.receiverDOB,
+            receiverBirthCountry: req.body.receiverBirthCountry,
+            consumerId: req.body.consumerId,
+            receiverPhone: req.body.receiverPhone,
+            mgiTransactionSessionID: req.body.mgiTransactionSessionID,
+            formFreeStaging: req.body.formFreeStaging,
+            receiverPhoneCountryCode: req.body.receiverPhoneCountryCode,
+        }, context);
+        res.send(response);
+    }
+    catch (error) {
+        res.send((0, errorHandler_1.handleErrorToClient)(error), 400);
+    }
+}));
+app.get("/commitTransaction", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let context = (0, getContext_1.getContext)(req);
+        let response = yield (0, commitTransaction_1.commitTransaction)("43711291", {
+            mgiTransactionSessionID: "4371129123E1743051522295",
+            productType: "RCV",
+        }, context);
+        res.send(response);
+    }
+    catch (error) {
+        res.json((0, errorHandler_1.handleErrorToClient)(error), 400);
+    }
+}));
+app.post("/commitTransaction", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let context = (0, getContext_1.getContext)(req);
+        let response = yield (0, commitTransaction_1.commitTransaction)(req.body.agentId, {
+            mgiTransactionSessionID: req.body.mgiTransactionSessionID,
+            productType: req.body.productType,
+            timeStamp: req.body.timeStamp
+        }, context);
+        res.send(response);
+    }
+    catch (error) {
+        res.json((0, errorHandler_1.handleErrorToClient)(error), 400);
+    }
+}));
+app.get("/receiveReversal", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let context = (0, getContext_1.getContext)(req);
+        let response = yield (0, receiveReversal_1.receiveReversal)("43711291", {
+            receiveAmount: 1495,
+            referenceNumber: "asdasdasd",
+            receiveReversalReason: IIReceiveReversalRequest_1.receiveReversalReasonEnum.WANTS_CASH,
+        }, context);
+        res.send(response);
+    }
+    catch (error) {
+        res.json((0, errorHandler_1.handleErrorToClient)(error), 400);
+    }
+}));
+app.post("/receiveReversal", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let context = (0, getContext_1.getContext)(req);
+        let response = yield (0, receiveReversal_1.receiveReversal)(req.body.agentId, {
+            receiveAmount: req.body.receiveAmount,
+            referenceNumber: req.body.referenceNumber,
+            receiveReversalReason: IIReceiveReversalRequest_1.receiveReversalReasonEnum.WANTS_CASH,
+        }, context);
+        res.send(response);
+    }
+    catch (error) {
+        res.json((0, errorHandler_1.handleErrorToClient)(error), 400);
+    }
+}));
+/***
+ * Send
+ */
+app.get("/send", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let context = (0, getContext_1.getContext)(req);
+        let response = yield (0, Receive_1.receiveValidation)("43711291", {
+            referenceNumber: "53750350",
+        }, context);
+        res.send(response);
+    }
+    catch (error) {
+        res.json((0, errorHandler_1.handleErrorToClient)(error), 400);
+    }
+}));
+// app.get("/sendValidation", async (req: any, res: any) => {
+//   try {
+//     let response = await sendValidation({
+//       referenceNumber: "53750350"
+//     });
+//     res.send(response);
+//   } catch (error) {
+//     res.json(handleErrorToClient(error), 400);
+//   }
+// });
+/****
+ * Test
+ */
+app.get("/test", (req, res) => {
+    res.send(`Fecha: ${dates_1.DateTimeStamp.nowWithTimeStampMoneyGram()}`);
+});
+app.get("/testObject", (req, res) => {
+    let objeto = {
+        cosa: "asda",
+        cosa2: undefined,
+        cosa3: "asda",
+        cosa4: undefined,
+        cosa5: "asda",
+        cosa6: "asda",
+    };
+    (0, objectManipulation_1.clearUndefinedProperties)(objeto);
+    res.send(JSON.stringify(objeto));
+});
+/**
+ * Initiate API MoneyGram
+ */
+app.listen(port, () => {
+    console.log(`Example app listening at http://localhost:${port}`);
+});
+
+--- End of C:\Users\ELA\Documents\Proyectos\ITECH\MoneyGramProxy\dist\index.js ---
+
