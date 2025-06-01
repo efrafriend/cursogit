@@ -1,0 +1,4103 @@
+﻿
+SECCIÓN 1: ESTRUCTURA DEL PROYECTO
+===================================
+[Directorio] .\FileProcessor
+[Directorio] .\FileProcessor\Application
+[Directorio] .\FileProcessor\Application\CommandHandlers
+[Archivo] .\FileProcessor\Application\CommandHandlers\ProcessFileCommandHandler.cs
+[Directorio] .\FileProcessor\Application\Exceptions
+[Archivo] .\FileProcessor\Application\Exceptions\CustomApiException.cs
+[Directorio] .\FileProcessor\Core
+[Directorio] .\FileProcessor\Core\Enums
+[Directorio] .\FileProcessor\Core\Interfaces
+[Directorio] .\FileProcessor\Core\Interfaces\Bahu
+[Archivo] .\FileProcessor\Core\Interfaces\Bahu\IAccountRepository.cs
+[Archivo] .\FileProcessor\Core\Interfaces\Bahu\IAuthorizationRepository.cs
+[Archivo] .\FileProcessor\Core\Interfaces\Bahu\IBahuDataService.cs
+[Archivo] .\FileProcessor\Core\Interfaces\Bahu\ICustomerRepository.cs
+[Directorio] .\FileProcessor\Core\Interfaces\Prosa
+[Archivo] .\FileProcessor\Core\Interfaces\Prosa\IArchivosProcesadosRepository.cs
+[Archivo] .\FileProcessor\Core\Interfaces\Prosa\IDetailEMVRepository.cs
+[Archivo] .\FileProcessor\Core\Interfaces\Prosa\IDetailRepository.cs
+[Archivo] .\FileProcessor\Core\Interfaces\Prosa\IHeaderRepository.cs
+[Archivo] .\FileProcessor\Core\Interfaces\Prosa\ITrailerRepository.cs
+[Directorio] .\FileProcessor\Core\Interfaces\RemesaEfectiva
+[Archivo] .\FileProcessor\Core\Interfaces\RemesaEfectiva\IHeaderRepository.cs
+[Archivo] .\FileProcessor\Core\Interfaces\RemesaEfectiva\ITransactionRepository.cs
+[Archivo] .\FileProcessor\Core\Interfaces\IDataRecord.cs
+[Archivo] .\FileProcessor\Core\Interfaces\IFileParser.cs
+[Archivo] .\FileProcessor\Core\Interfaces\IFileProcessor.cs
+[Directorio] .\FileProcessor\Core\Models
+[Directorio] .\FileProcessor\Core\Models\Bahu
+[Archivo] .\FileProcessor\Core\Models\Bahu\Account.cs
+[Archivo] .\FileProcessor\Core\Models\Bahu\ArchivosProcesados.cs
+[Archivo] .\FileProcessor\Core\Models\Bahu\Autorizations.cs
+[Archivo] .\FileProcessor\Core\Models\Bahu\Customer.cs
+[Directorio] .\FileProcessor\Core\Models\Prosa
+[Archivo] .\FileProcessor\Core\Models\Prosa\ArchivosProcesadosRecord.cs
+[Archivo] .\FileProcessor\Core\Models\Prosa\DetailEMVRecord.cs
+[Archivo] .\FileProcessor\Core\Models\Prosa\DetailRecord.cs
+[Archivo] .\FileProcessor\Core\Models\Prosa\HeaderRecord.cs
+[Archivo] .\FileProcessor\Core\Models\Prosa\TrailerRecord.cs
+[Directorio] .\FileProcessor\Core\Models\RemesaEfectiva
+[Archivo] .\FileProcessor\Core\Models\RemesaEfectiva\HeaderRecord.cs
+[Archivo] .\FileProcessor\Core\Models\RemesaEfectiva\TransactionRecord.cs
+[Archivo] .\FileProcessor\Core\Models\FileMetadata.cs
+[Archivo] .\FileProcessor\Core\Models\FileParseResult.cs
+[Archivo] .\FileProcessor\Core\Models\ScanDirectoryConfig.cs
+[Directorio] .\FileProcessor\Core\Services
+[Archivo] .\FileProcessor\Core\Services\BahuDataService.cs
+[Archivo] .\FileProcessor\Core\Services\ProsaPosteoService.cs
+[Archivo] .\FileProcessor\Core\Services\RemesaEfectivaService.cs
+[Directorio] .\FileProcessor\Infrastructure
+[Directorio] .\FileProcessor\Infrastructure\Data
+[Directorio] .\FileProcessor\Infrastructure\Data\Bahu
+[Archivo] .\FileProcessor\Infrastructure\Data\Bahu\AccountRepository.cs
+[Archivo] .\FileProcessor\Infrastructure\Data\Bahu\AuthorizationRepository.cs
+[Archivo] .\FileProcessor\Infrastructure\Data\Bahu\CustomerRepository.cs
+[Directorio] .\FileProcessor\Infrastructure\Data\Prosa
+[Archivo] .\FileProcessor\Infrastructure\Data\Prosa\ArchivosProcesadosRepository.cs
+[Archivo] .\FileProcessor\Infrastructure\Data\Prosa\DetailEMVRepository.cs
+[Archivo] .\FileProcessor\Infrastructure\Data\Prosa\DetailRepository.cs
+[Archivo] .\FileProcessor\Infrastructure\Data\Prosa\HeaderRepository.cs
+[Archivo] .\FileProcessor\Infrastructure\Data\Prosa\TrailerRepository.cs
+[Directorio] .\FileProcessor\Infrastructure\Data\RemesaEfectiva
+[Archivo] .\FileProcessor\Infrastructure\Data\RemesaEfectiva\TransactionRepository.cs
+[Directorio] .\FileProcessor\Infrastructure\FileParsers
+[Directorio] .\FileProcessor\Infrastructure\FileParsers\Bahu
+[Archivo] .\FileProcessor\Infrastructure\FileParsers\Bahu\AccountsFileParser.cs
+[Archivo] .\FileProcessor\Infrastructure\FileParsers\Bahu\AuthorizationsFileParser.cs
+[Archivo] .\FileProcessor\Infrastructure\FileParsers\Bahu\CustomersFileParser.cs
+[Archivo] .\FileProcessor\Infrastructure\FileParsers\BahuCsvFileParser.cs
+[Archivo] .\FileProcessor\Infrastructure\FileParsers\BaseFileParser.cs
+[Archivo] .\FileProcessor\Infrastructure\FileParsers\CsvFileParser.cs
+[Archivo] .\FileProcessor\Infrastructure\FileParsers\ExcelFileParser.cs
+[Archivo] .\FileProcessor\Infrastructure\FileParsers\FileParserFactory.cs
+[Archivo] .\FileProcessor\Infrastructure\FileParsers\ProsaTextFileParser.cs
+[Archivo] .\FileProcessor\Infrastructure\FileParsers\RemesaEfectivaCsvFileParser.cs
+[Archivo] .\FileProcessor\Infrastructure\FileParsers\TextFileParser.cs
+[Directorio] .\FileProcessor\Infrastructure\Logging
+[Archivo] .\FileProcessor\Infrastructure\Logging\DbLoggerConfigurator.cs
+[Directorio] .\FileProcessor\Properties
+[Archivo] .\FileProcessor\appsettings.json
+[Archivo] .\FileProcessor\Program.cs
+
+SECCIÓN 2: CONTENIDO DE ARCHIVOS DE CÓDIGO
+==========================================
+
+--- Contenido de .\.git\ms-persist.xml ---
+    <?xml version="1.0" encoding="utf-8"?>
+    <PendingCommit>
+      <CommitComment />
+      <PinnedBranches />
+      <PublishPrompt Enabled="True" />
+      <ActiveAccountPrompt Enabled="True" />
+      <RepositorySorts />
+      <CreatePullRequest_DefaultTargetBranch />
+    </PendingCommit>
+--- Fin del contenido de .\.git\ms-persist.xml ---
+
+--- Contenido de .\FileProcessor\appsettings.json ---
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft": "Warning",
+          "Microsoft.Hosting.Lifetime": "Information"
+        },
+        "EventLog": {
+          "SourceName": "FileProcessorApp",
+          "LogName": "Application"
+        },
+        "EmailSettings": {
+          "SmtpServer": "smtp.tudominio.com",
+          "Port": 587,
+          "FromAddress": "notificaciones@tudominio.com",
+          "ToAddress": "admin@tudominio.com",
+          "Username": "tu_usuario",
+          "Password": "tu_contraseña"
+        }
+      },
+      "Serilog": {
+        "MinimumLevel": "Information",
+        "WriteTo": [
+          {
+            "Name": "File",
+            "Args": {
+              "path": "logs/log-.txt",
+              "rollingInterval": "Day",
+              "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}"
+            }
+          }
+        ]
+      },
+      "FileProcessorConfig": {
+        "ScanDirectories": [
+            {
+                "Name": "AlL",
+                "Path": "C:\\Users\\ELA\\Documents\\Proyectos\\SACBAHU\\Origen",
+                "FilePatterns": [ "*.txt", "*.csv" ],
+                "ProcessedDirectory": "C:\\Users\\ELA\\Documents\\Proyectos\\SACBAHU\\Procesados",
+                "ErrorDirectory": "C:\\Users\\ELA\\Documents\\Proyectos\\SACBAHU\\Errores"
+            }
+        ],
+        "ScanIntervalMinutes": 1,
+        "MaxParallelProcesses": 1
+      },
+    
+        "ConnectionStrings": {
+            "DataBase": "Server=ELALAP;Database=Prosa_test;User Id=sa;Password=frefra;MultipleActiveResultSets=True;TrustServerCertificate=True;",
+            "BahuDb": "Server=ELALAP;Database=ProsaDBTest;User Id=sa;Password=frefra;MultipleActiveResultSets=True;TrustServerCertificate=True;",
+            "RemesaEfectiva": "Server=ELALAP;Database=RemesaEfectiva;User Id=sa;Password=frefra;MultipleActiveResultSets=True;TrustServerCertificate=True;"
+        }
+    }
+    
+--- Fin del contenido de .\FileProcessor\appsettings.json ---
+
+--- Contenido de .\FileProcessor\Program.cs ---
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Threading.Tasks;
+    using FileProcessor.Application.CommandHandlers;
+    using FileProcessor.Core.Interfaces;
+    using FileProcessor.Core.Interfaces.Prosa;
+    using FileProcessor.Core.Models;
+    using FileProcessor.Core.Services;
+    using FileProcessor.Infrastructure.Data.Prosa;
+    using FileProcessor.Infrastructure.FileParsers;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using Serilog;
+    using Serilog.Events;
+    using Serilog.Formatting.Json;
+    using Serilog.Sinks.EventLog;
+    using FileProcessor.Infrastructure.Logging;
+    using FileProcessor.Core.Interfaces.Bahu;
+    using FileProcessor.Infrastructure.Data.Bahu;
+    using FileProcessor.Core.Interfaces.RemesaEfectiva;
+    
+    class Program
+    {
+        static async Task Main(string[] args)
+        {
+            // Configurar el builder de configuración
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+    
+            // Definir la ruta de logs
+            string logPath = Path.Combine(Directory.GetCurrentDirectory(), "logs", "log-.txt");
+    
+            // Configurar Serilog
+            DbLoggerConfigurator.ConfigureLogger(configuration);
+    
+            //Log.Logger = new LoggerConfiguration()
+            //    .WriteTo.Console()
+            //    .WriteTo.File(
+            //        logPath,
+            //        rollingInterval: RollingInterval.Day, // Un solo archivo por día
+            //        retainedFileCountLimit: 30, // Mantener solo los últimos 30 días
+            //        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}",
+            //        restrictedToMinimumLevel: LogEventLevel.Information,
+            //        shared: true // Permitir acceso concurrente
+            //    )
+            //    .WriteTo.EventLog(
+            //        source: "FileProcessorApp",
+            //        logName: "Application",
+            //        restrictedToMinimumLevel: LogEventLevel.Warning // Solo avisos y errores en Event Log
+            //    )
+            //    .CreateLogger();
+    
+            // Acumulador de logs para Event Log
+            var eventLogBuffer = new List<string>();
+    
+            try
+            {
+                eventLogBuffer.Add("File Processor Service started");
+    
+                // Configurar inyección de dependencias
+                var services = new ServiceCollection();
+                services.AddSingleton<IConfiguration>(configuration);
+                services.AddTransient<IArchivosProcesadosRepository, ArchivosProcesadosRepository>();
+                services.AddTransient<IDetailEMVRepository, DetailEMVRepository>();
+                services.AddTransient<IDetailRepository, DetailRepository>();
+                services.AddTransient<IHeaderRepository, HeaderRepository>();
+                services.AddTransient<ITrailerRepository, TrailerRepository>();
+                services.AddTransient<ProsaPosteoService>();
+    
+                // Agregar repositorios de BAHU
+                services.AddTransient<IAccountRepository, AccountRepository>();
+                services.AddTransient<ICustomerRepository, CustomerRepository>();
+                services.AddTransient<IAuthorizationRepository, AuthorizationRepository>();
+    
+                //Agregar repositorios de Remesa Efectiva   
+                services.AddTransient<ITransactionRepository, ITransactionRepository>();
+    
+    
+                // Configuración específica del FileProcessor
+                services.Configure<FileProcessorConfig>(configuration.GetSection("FileProcessorConfig"));
+    
+                // Agregar parsers
+                services.AddTransient<IFileParser, TextFileParser>();
+                services.AddTransient<IFileParser, CsvFileParser>();
+                services.AddTransient<IFileParser, ExcelFileParser>();
+                services.AddTransient<IFileParser, ProsaTextFileParser>();
+                services.AddTransient<TextFileParser>();
+    
+                // Agregar parsers de BAHU
+                services.AddTransient<IFileParser, BahuCsvFileParser>();
+    
+                // Agregar parsers de remesa efectiva
+                services.AddTransient<IFileParser, RemesaEfectivaCsvFileParser>();
+    
+    
+                // Registrar factory y command handler
+                services.AddSingleton<FileParserFactory>();
+                services.AddTransient<ProcessFileCommandHandler>();
+    
+                // Agregar servicios de BAHU
+                services.AddTransient<IBahuDataService, BahuDataService>();
+    
+                // Agregar servicios de Prosa   
+                services.AddTransient<IProsaPosteoService, ProsaPosteoService>();
+    
+                // Agregar servicios de Remesa Efectiva 
+                services.AddTransient<IRemesaEfectivaService, RemesaEfectivaService>();
+    
+    
+                // Agregar logging con Serilog
+                services.AddLogging(loggingBuilder =>
+                {
+                    loggingBuilder.ClearProviders(); // Elimina otros providers y usa solo Serilog
+                    loggingBuilder.AddSerilog();
+                });
+    
+                var serviceProvider = services.BuildServiceProvider();
+    
+                var handler = serviceProvider.GetRequiredService<ProcessFileCommandHandler>();
+                await handler.ProcessAllDirectories();
+    
+                eventLogBuffer.Add("File processing completed successfully");
+    
+                // Guardar una única entrada en el Event Log
+                WriteToEventLog(string.Join(" | ", eventLogBuffer), EventLogEntryType.Information);
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = $"Error: {ex.Message} | StackTrace: {ex.StackTrace}";
+                WriteToEventLog(errorMessage, EventLogEntryType.Error);
+                Log.Fatal(ex, "Service stopped due to an error");
+            }
+            finally
+            {
+                Log.Information("File Processor Service stopped");
+                Log.CloseAndFlush();
+            }
+        }
+    
+        /// <summary>
+        /// Escribe un mensaje en el log de eventos de Windows en una sola línea.
+        /// </summary>
+        private static void WriteToEventLog(string message, EventLogEntryType type)
+        {
+            string source = "FileProcessorApp";
+            string logName = "Application";
+    
+            if (!EventLog.SourceExists(source))
+            {
+                EventLog.CreateEventSource(source, logName);
+            }
+    
+            using (EventLog eventLog = new EventLog(logName))
+            {
+                eventLog.Source = source;
+                eventLog.WriteEntry(message, type);
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Program.cs ---
+
+--- Contenido de .\FileProcessor\Application\CommandHandlers\ProcessFileCommandHandler.cs ---
+    using FileProcessor.Core.Interfaces;
+    using FileProcessor.Core.Interfaces.Bahu;
+    using FileProcessor.Core.Models;
+    using FileProcessor.Infrastructure.FileParsers;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
+    
+    namespace FileProcessor.Application.CommandHandlers
+    {
+        public class ProcessFileCommandHandler
+        {
+            private readonly FileParserFactory _parserFactory;
+            private readonly ILogger<ProcessFileCommandHandler> _logger;
+            private readonly FileProcessorConfig _config;
+    
+            private readonly IEnumerable<IFileParser> _fileParsers;
+            private readonly IBahuDataService _bahuDataService;
+    
+    
+            public ProcessFileCommandHandler(
+    
+                IEnumerable<IFileParser> fileParsers,
+                 IBahuDataService bahuDataService,
+    
+                FileParserFactory parserFactory,
+                ILogger<ProcessFileCommandHandler> logger,
+                IOptions<FileProcessorConfig> config)
+            {
+    
+                _fileParsers = fileParsers;
+                _bahuDataService = bahuDataService;
+    
+                _parserFactory = parserFactory;
+                _logger = logger;
+                _config = config.Value;
+    
+                // Crear directorios si no existen
+                InitializeDirectories();
+            }
+    
+            private void InitializeDirectories()
+            {
+                foreach (var dirConfig in _config.ScanDirectories)
+                {
+                    EnsureDirectoryExists(dirConfig.Path);
+                    EnsureDirectoryExists(dirConfig.ProcessedDirectory);
+                    EnsureDirectoryExists(dirConfig.ErrorDirectory);
+                }
+            }
+    
+            private void EnsureDirectoryExists(string path)
+            {
+                if (!Directory.Exists(path))
+                {
+                    _logger.LogInformation($"Creating directory: {path}");
+                    Directory.CreateDirectory(path);
+                }
+            }
+    
+            public async Task ProcessAllDirectories()
+            {
+                _logger.LogInformation("Starting directory scan...");
+    
+                var tasks = new List<Task>();
+                var semaphore = new SemaphoreSlim(_config.MaxParallelProcesses);
+    
+                foreach (var dirConfig in _config.ScanDirectories)
+                {
+                    _logger.LogInformation($"Scanning directory: {dirConfig.Name} ({dirConfig.Path})");
+    
+                    foreach (var pattern in dirConfig.FilePatterns)
+                    {
+                        var files = Directory.GetFiles(dirConfig.Path, pattern);
+    
+                        foreach (var filePath in files)
+                        {
+                            await semaphore.WaitAsync();
+                            tasks.Add(Task.Run(async () =>
+                            {
+                                try
+                                {
+                                    await ProcessSingleFile(filePath, dirConfig);
+                                }
+                                finally
+                                {
+                                    semaphore.Release();
+                                }
+                            }));
+                        }
+                    }
+                }
+    
+                await Task.WhenAll(tasks);
+                _logger.LogInformation("Directory scan completed");
+            }
+    
+            private async Task ProcessSingleFile(string filePath, ScanDirectoryConfig dirConfig)
+            {
+                var fileName = Path.GetFileName(filePath);
+                _logger.LogInformation($"Processing file: {fileName}");
+    
+                try
+                {
+                    var parser = _parserFactory.GetParser(filePath);
+                    var result = await parser.ParseAsync(filePath);
+    
+                    if (result.Success)
+                    {
+                        // Mover a procesados
+                        var processedPath = Path.Combine(dirConfig.ProcessedDirectory, fileName);
+                        File.Move(filePath, processedPath);
+                        _logger.LogInformation($"Successfully processed {fileName}. Moved to: {processedPath}");
+                    }
+                    else
+                    {
+                        // Mover a errores
+                        var errorPath = Path.Combine(dirConfig.ErrorDirectory, fileName);
+                        File.Move(filePath, errorPath);
+                        _logger.LogError($"Failed to process {fileName}. Moved to: {errorPath}. Error: {result.Message}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var errorPath = Path.Combine(dirConfig.ErrorDirectory, fileName);
+                    File.Move(filePath, errorPath);
+                    _logger.LogError(ex, $"Error processing file {fileName}. Moved to: {errorPath}");
+                }
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Application\CommandHandlers\ProcessFileCommandHandler.cs ---
+
+--- Contenido de .\FileProcessor\Application\Exceptions\CustomApiException.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Application.Exceptions
+    {
+        public class CustomApiException : Exception
+        {
+            public int StatusCode { get; }
+    
+            public CustomApiException(string message, int statusCode = 400) : base(message)
+            {
+                StatusCode = statusCode;
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Application\Exceptions\CustomApiException.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\IDataRecord.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Interfaces
+    {
+        public interface IDataRecord
+        {
+            Dictionary<string, object> ToDictionary();
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\IDataRecord.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\IFileParser.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using FileProcessor.Core.Models;
+    
+    namespace FileProcessor.Core.Interfaces
+    {
+        public interface IFileParser
+        {
+            Task<FileParseResult> ParseAsync(string filePath);
+            bool CanParse(string fileExtension);
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\IFileParser.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\IFileProcessor.cs ---
+    using FileProcessor.Core.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Interfaces
+    {
+        public interface IFileProcessor
+        {
+            /// <summary>
+            /// Verifica si el archivo ya fue procesado.
+            /// </summary>
+            Task<bool> IsFileAlreadyProcessed(string filePath);
+    
+            /// <summary>
+            /// Procesa el archivo y extrae la información necesaria.
+            /// </summary>
+            Task<FileParseResult> ProcessFileAsync(string filePath);
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\IFileProcessor.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\Bahu\IAccountRepository.cs ---
+    using FileProcessor.Core.Models.Bahu;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Interfaces.Bahu
+    {
+        public interface IAccountRepository
+        {
+            Task<Account> GetAccountByIdAsync(int accountId);
+            Task InsertAccountAsync(Account account);
+            Task InsertAccountsAsync(IEnumerable<Account> accounts); // Para inserciones masivas
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\Bahu\IAccountRepository.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\Bahu\IAuthorizationRepository.cs ---
+    using FileProcessor.Core.Models.Bahu;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Interfaces.Bahu
+    {
+        public interface IAuthorizationRepository
+        {
+            Task<Authorization> GetAuthorizationByIdAsync(int movementId);
+            Task InsertAuthorizationAsync(Authorization authorization);
+            Task InsertAuthorizationsAsync(IEnumerable<Authorization> authorizations); // Para inserciones masivas
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\Bahu\IAuthorizationRepository.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\Bahu\IBahuDataService.cs ---
+    using FileProcessor.Core.Models.Bahu;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Interfaces.Bahu
+    {
+        public interface IBahuDataService
+        {
+            Task SaveAccountsAsync(IEnumerable<Account> accounts);
+            Task SaveCustomersAsync(IEnumerable<Customer> customers);
+            Task SaveAuthorizationsAsync(IEnumerable<Authorization> authorizations);
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\Bahu\IBahuDataService.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\Bahu\ICustomerRepository.cs ---
+    using FileProcessor.Core.Models.Bahu;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Interfaces.Bahu
+    {
+        public interface ICustomerRepository
+        {
+            Task<Customer> GetCustomerByIdAsync(int customerId);
+            Task InsertCustomerAsync(Customer customer);
+            Task InsertCustomersAsync(IEnumerable<Customer> customers); // Para inserciones masivas
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\Bahu\ICustomerRepository.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\Prosa\IArchivosProcesadosRepository.cs ---
+    using FileProcessor.Core.Models.Prosa;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Interfaces.Prosa
+    {
+        public interface IArchivosProcesadosRepository
+        {
+            /// <summary>
+            /// Verifica si un archivo ya ha sido procesado
+            /// </summary>
+            /// <param name="fileName">Nombre del archivo a verificar</param>
+            /// <returns>True si el archivo ya fue procesado, False en caso contrario</returns>
+            Task<bool> IsFileAlreadyProcessed(string fileName);
+    
+            ///// <summary>
+            ///// Registra un archivo como procesado
+            ///// </summary>
+            ///// <param name="fileName">Nombre del archivo</param>
+            ///// <param name="totalRecords">Total de registros procesados</param>
+            ///// <returns>ID del registro creado</returns>
+            //Task<int> RegisterFileProcessed(string fileName, int totalRecords);
+    
+    
+            public int InsertArchivosProcesadosRecord(ArchivosProcesadosRecord record, IDbTransaction transaction);
+        }  
+    }
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\Prosa\IArchivosProcesadosRepository.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\Prosa\IDetailEMVRepository.cs ---
+    using FileProcessor.Core.Models.Prosa;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    
+    namespace FileProcessor.Core.Interfaces.Prosa
+    {
+        public interface IDetailEMVRepository
+        {
+            public bool InsertDetalleEMVRecords(List<DetailEMVRecord> records, IDbTransaction transaction);
+    
+    
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\Prosa\IDetailEMVRepository.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\Prosa\IDetailRepository.cs ---
+    using FileProcessor.Core.Models.Prosa;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    
+    namespace FileProcessor.Core.Interfaces.Prosa
+    {
+        public interface IDetailRepository
+        {
+            public bool InsertDetailRecords(List<DetailRecord> records, IDbTransaction transaction);
+    
+    
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\Prosa\IDetailRepository.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\Prosa\IHeaderRepository.cs ---
+    using FileProcessor.Core.Models.Prosa;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Interfaces.Prosa
+    {
+        public interface IHeaderRepository
+        {
+            public bool InsertHeaderRecords(HeaderRecord record, IDbTransaction transaction);
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\Prosa\IHeaderRepository.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\Prosa\ITrailerRepository.cs ---
+    using FileProcessor.Core.Models.Prosa;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Interfaces.Prosa
+    {
+        public interface ITrailerRepository
+        {
+            public bool InsertTrailerRecords(TrailerRecord records, IDbTransaction transaction);
+    
+    
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\Prosa\ITrailerRepository.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\RemesaEfectiva\IHeaderRepository.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using FileProcessor.Core.Models.RemesaEfectiva;
+    
+    namespace FileProcessor.Core.Interfaces.RemesaEfectiva
+    {
+        public interface IHeaderRepository
+        {
+            /// <summary>
+            /// Verifica si un archivo ya ha sido procesado
+            /// </summary>
+            /// <param name="fileName">Nombre del archivo a verificar</param>
+            /// <returns>True si el archivo ya fue procesado, False en caso contrario</returns>
+            Task<bool> IsFileAlreadyProcessed(string fileName);
+            public int InsertHeaderRecords(HeaderRecord record, IDbTransaction transaction);
+        }
+    }
+    
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\RemesaEfectiva\IHeaderRepository.cs ---
+
+--- Contenido de .\FileProcessor\Core\Interfaces\RemesaEfectiva\ITransactionRepository.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using FileProcessor.Core.Models.Prosa;
+    using FileProcessor.Core.Models.RemesaEfectiva;
+    
+    namespace FileProcessor.Core.Interfaces.RemesaEfectiva
+    {
+        public interface ITransactionRepository
+        {
+            public bool InsertTransactionRecords(List<TransactionRecord> records, IDbTransaction transaction);
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Interfaces\RemesaEfectiva\ITransactionRepository.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\FileMetadata.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Models
+    {
+        public class FileMetadata
+        {
+            public string FileName { get; set; }
+            public string FileType { get; set; }
+            public DateTime ProcessDate { get; set; } = DateTime.Now;
+            public int TotalRecords { get; set; }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Models\FileMetadata.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\FileParseResult.cs ---
+    using FileProcessor.Core.Interfaces;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Models
+    {
+        public class FileParseResult
+        {
+            public bool Success { get; set; }
+            public string Message { get; set; }
+            public string ErrorMessage { get; set; }
+            public List<IDataRecord> Records { get; set; } = new();
+            public FileMetadata Metadata { get; set; }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Models\FileParseResult.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\ScanDirectoryConfig.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Models
+    {
+        public class ScanDirectoryConfig
+        {
+            public string Name { get; set; }
+            public string Path { get; set; }
+            public string[] FilePatterns { get; set; }
+            public string ProcessedDirectory { get; set; }
+            public string ErrorDirectory { get; set; }
+        }
+    
+        public class FileProcessorConfig
+        {
+            public ScanDirectoryConfig[] ScanDirectories { get; set; }
+            public int ScanIntervalMinutes { get; set; }
+            public int MaxParallelProcesses { get; set; }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Models\ScanDirectoryConfig.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\Bahu\Account.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using FileProcessor.Core.Interfaces; // Add this using
+    using System;
+    
+    namespace FileProcessor.Core.Models.Bahu
+    {
+        public class Account : IDataRecord
+        {
+            public int ProductId { get; set; }
+            public string PocketName { get; set; }
+            public int CustomerId { get; set; }
+            public int AccountId { get; set; }
+            public int CardId { get; set; }
+            public string MaskedPan { get; set; }
+            public string PanLastFourDigits { get; set; }
+            public DateTime ExpirationDate { get; set; }
+            public DateTime ActivationDate { get; set; }
+            public string CardStatus { get; set; }
+            public DateTime? CardStatusChangeDate { get; set; }
+            public DateTime? PhysicalCardRequestDate { get; set; }
+            public DateTime? EmbossingRequestDate { get; set; }
+            public string AccountStatus { get; set; }
+            public string ShippingStreetNumber { get; set; }
+            public string ShippingUnitNumber { get; set; }
+            public string ShippingAddress { get; set; }
+            public string ShippingAdditionalAddress { get; set; }
+            public string ShippingCity { get; set; }
+            public string ShippingZipcode { get; set; }
+            public string ShortCustomerName { get; set; }
+            public int ArchivoId { get; set; }
+    
+            public Dictionary<string, object> ToDictionary()
+            {
+                return new Dictionary<string, object>
+                {
+                    { "ProductId", ProductId },
+                    { "PocketName", PocketName },
+                    { "CustomerId", CustomerId },
+                    { "AccountId", AccountId },
+                    { "CardId", CardId },
+                    { "MaskedPan", MaskedPan },
+                    { "PanLastFourDigits", PanLastFourDigits },
+                    { "ExpirationDate", ExpirationDate },
+                    { "ActivationDate", ActivationDate },
+                    { "CardStatus", CardStatus },
+                    { "CardStatusChangeDate", CardStatusChangeDate },
+                    { "PhysicalCardRequestDate", PhysicalCardRequestDate },
+                    { "EmbossingRequestDate", EmbossingRequestDate },
+                    { "AccountStatus", AccountStatus },
+                    { "ShippingStreetNumber", ShippingStreetNumber },
+                    { "ShippingUnitNumber", ShippingUnitNumber },
+                    { "ShippingAddress", ShippingAddress },
+                    { "ShippingAdditionalAddress", ShippingAdditionalAddress },
+                    { "ShippingCity", ShippingCity },
+                    { "ShippingZipcode", ShippingZipcode },
+                    { "ShortCustomerName", ShortCustomerName },
+                    { "ArchivoId", ArchivoId }
+                };
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Models\Bahu\Account.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\Bahu\ArchivosProcesados.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Models.Bahu
+    {
+        public class ArchivosProcesados
+        {
+            public int ArchivoId { get; set; }
+            public string NombreArchivo { get; set; }
+            public DateTime FechaProcesamiento { get; set; }
+            public int TotalRegistros { get; set; }
+            public int RegistrosCargados { get; set; }
+        }
+    
+    }
+--- Fin del contenido de .\FileProcessor\Core\Models\Bahu\ArchivosProcesados.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\Bahu\Autorizations.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using FileProcessor.Core.Interfaces;
+    using System;
+    using System.Collections.Generic;
+    
+    namespace FileProcessor.Core.Models.Bahu
+    {
+        public class Authorization : IDataRecord
+        {
+            public int ProductId { get; set; }
+            public string PocketName { get; set; }
+            public int CustomerId { get; set; }
+            public int AccountId { get; set; }
+            public DateTime CreateDate { get; set; }
+            public int MovementId { get; set; }
+            public int OperationId { get; set; }
+            public string MerchantLocation { get; set; }
+            public string Country { get; set; }
+            public decimal Amount { get; set; }
+            public int CurrencyId { get; set; }
+            public decimal FeeAmount { get; set; }
+            public decimal TotalAmount { get; set; }
+            public int IsoResponseCode { get; set; }
+            public int AuthorizationNumber { get; set; }
+            public string MovementStatus { get; set; }
+            public string ForceFlag { get; set; }
+            public decimal CashbackAmount { get; set; }
+            public string ContactlessFlag { get; set; }
+            public string PresentCardFlag { get; set; }
+            public string CheckInOutFlag { get; set; }
+            public int MerchantId { get; set; }
+            public int MerchantCategoryCode { get; set; }
+            public int AcquirerBin { get; set; }
+            public int IsoCardAcceptorTerminalId { get; set; }
+            public int TerminalCapabilities { get; set; }
+            public int PosEntryMode { get; set; }
+            public int EntryType { get; set; }
+            public string ReversalFlag { get; set; }
+            public int ArchivoId { get; set; }
+    
+            public Dictionary<string, object> ToDictionary()
+            {
+                return new Dictionary<string, object>
+                {
+                    { "ProductId", ProductId },
+                    { "PocketName", PocketName },
+                    { "CustomerId", CustomerId },
+                    { "AccountId", AccountId },
+                    { "CreateDate", CreateDate },
+                    { "MovementId", MovementId },
+                    { "OperationId", OperationId },
+                    { "MerchantLocation", MerchantLocation },
+                    { "Country", Country },
+                    { "Amount", Amount },
+                    { "CurrencyId", CurrencyId },
+                    { "FeeAmount", FeeAmount },
+                    { "TotalAmount", TotalAmount },
+                    { "IsoResponseCode", IsoResponseCode },
+                    { "AuthorizationNumber", AuthorizationNumber },
+                    { "MovementStatus", MovementStatus },
+                    { "ForceFlag", ForceFlag },
+                    { "CashbackAmount", CashbackAmount },
+                    { "ContactlessFlag", ContactlessFlag },
+                    { "PresentCardFlag", PresentCardFlag },
+                    { "CheckInOutFlag", CheckInOutFlag },
+                    { "MerchantId", MerchantId },
+                    { "MerchantCategoryCode", MerchantCategoryCode },
+                    { "AcquirerBin", AcquirerBin },
+                    { "IsoCardAcceptorTerminalId", IsoCardAcceptorTerminalId },
+                    { "TerminalCapabilities", TerminalCapabilities },
+                    { "PosEntryMode", PosEntryMode },
+                    { "EntryType", EntryType },
+                    { "ReversalFlag", ReversalFlag },
+                    { "ArchivoId", ArchivoId }
+                };
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Models\Bahu\Autorizations.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\Bahu\Customer.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using FileProcessor.Core.Interfaces;
+    using System;
+    using System.Collections.Generic;
+    
+    namespace FileProcessor.Core.Models.Bahu
+    {
+        public class Customer : IDataRecord
+        {
+            public int ProductId { get; set; }
+            public string PocketName { get; set; }
+            public string Name { get; set; }
+            public string AdditionalName { get; set; }
+            public string LastName { get; set; }
+            public string AdditionalLastName { get; set; }
+            public string StreetNumber { get; set; }
+            public string UnitNumber { get; set; }
+            public string Address { get; set; }
+            public string AdditionalAddress { get; set; }
+            public string City { get; set; }
+            public string State { get; set; }
+            public string Zipcode { get; set; }
+            public string PhoneNumber { get; set; }
+            public DateTime Birthdate { get; set; }
+            public int BirthCountryId { get; set; }
+            public string Email { get; set; }
+            public string FiscalId { get; set; }
+            public string Occupation { get; set; }
+            public string County { get; set; }
+            public string ResidencePlace { get; set; }
+            public int RiskLevel { get; set; }
+            public int CustomerId { get; set; }
+            public DateTime CreationDate { get; set; }
+            public int AccountId { get; set; }
+            public string Status { get; set; }
+            public DateTime StatusChangeDate { get; set; }
+            public DateTime LockDate { get; set; }
+            public decimal Balance { get; set; }
+            public decimal RetainedBalance { get; set; }
+            public DateTime LastTransactionDate { get; set; }
+            public int ArchivoId { get; set; }
+    
+            public Dictionary<string, object> ToDictionary()
+            {
+                return new Dictionary<string, object>
+                {
+                    { "ProductId", ProductId },
+                    { "PocketName", PocketName },
+                    { "Name", Name },
+                    { "AdditionalName", AdditionalName },
+                    { "LastName", LastName },
+                    { "AdditionalLastName", AdditionalLastName },
+                    { "StreetNumber", StreetNumber },
+                    { "UnitNumber", UnitNumber },
+                    { "Address", Address },
+                    { "AdditionalAddress", AdditionalAddress },
+                    { "City", City },
+                    { "State", State },
+                    { "Zipcode", Zipcode },
+                    { "PhoneNumber", PhoneNumber },
+                    { "Birthdate", Birthdate },
+                    { "BirthCountryId", BirthCountryId },
+                    { "Email", Email },
+                    { "FiscalId", FiscalId },
+                    { "Occupation", Occupation },
+                    { "County", County },
+                    { "ResidencePlace", ResidencePlace },
+                    { "RiskLevel", RiskLevel },
+                    { "CustomerId", CustomerId },
+                    { "CreationDate", CreationDate },
+                    { "AccountId", AccountId },
+                    { "Status", Status },
+                    { "StatusChangeDate", StatusChangeDate },
+                    { "LockDate", LockDate },   
+                    { "Balance", Balance },
+                    { "RetainedBalance", RetainedBalance },
+                    { "LastTransactionDate", LastTransactionDate },
+                    { "ArchivoId", ArchivoId }
+                };
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Models\Bahu\Customer.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\Prosa\ArchivosProcesadosRecord.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Models.Prosa
+    {
+        public class ArchivosProcesadosRecord
+        {
+            public int ArchivoId { get; set; }
+            public string NombreArchivo { get; set; }
+            public DateTime FechaProcesamiento { get; set; }
+            public int TotalRegistros { get; set; }
+            public int RegistrosCargados { get; set; }
+            public string Estado { get; set; }
+            public string HashArchivo { get; set; }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Models\Prosa\ArchivosProcesadosRecord.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\Prosa\DetailEMVRecord.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Models.Prosa
+    {
+        public class DetailEMVRecord
+        {
+            public int DetalleId { get; set; }
+            public string NumeroAutorizacion { get; set; }
+            public string NumeroCuenta { get; set; }
+            public string TipoRegistro { get; set; } = "03";
+            public string ApplicationCryptogram { get; set; }
+            public string CryptogramInformationData { get; set; }
+            public string IssuerApplicationData { get; set; }
+            public string UnpredictableNumber { get; set; }
+            public string ApplicationTransactionCounter { get; set; }
+            public string TerminalVerificationResult { get; set; }
+            public string TransactionDate { get; set; }
+            public string TransactionType { get; set; }
+            public string AmountAuthorized { get; set; }
+            public string TransactionCurrencyCode { get; set; }
+            public string ApplicationInterchangeProfile { get; set; }
+            public string TerminalCountryCode { get; set; }
+            public string AmountOther { get; set; }
+            public string CardholderVerificationMethod { get; set; }
+            public string TerminalCapabilities { get; set; }
+            public string TerminalType { get; set; }
+            public string InterfaceDeviceSerialNumber { get; set; }
+            public string DedicatedFileName { get; set; }
+            public string TerminalApplicationVersionNumber { get; set; }
+            public string IssuerAuthenticationData { get; set; }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Models\Prosa\DetailEMVRecord.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\Prosa\DetailRecord.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Models.Prosa
+    {
+        public class DetailRecord
+        {
+            public int DetalleId { get; set; }
+            public int ArchivoId { get; set; }
+            public string BancoEmisor { get; set; }
+            public string NumeroCuenta { get; set; }
+            public string NaturalezaContable { get; set; }
+            public string MarcaProducto { get; set; }
+            public string FechaConsumo { get; set; }
+            public string HoraConsumo { get; set; }
+            public string FechaProceso { get; set; }
+            public string TipoTransaccion { get; set; }
+            public string NumeroLiquidacion { get; set; }
+            public decimal ImporteOrigenTotal { get; set; }
+            public decimal ImporteOrigenConsumo { get; set; }
+            public string ClaveMonedaOrigen { get; set; }
+            public decimal ImporteDestinoTotal { get; set; }
+            public decimal ImporteDestinoConsumo { get; set; }
+            public string ClaveMonedaDestino { get; set; }
+            public decimal ParidadDestino { get; set; }
+            public decimal ImporteLiquidacionTotal { get; set; }
+            public decimal ImporteLiquidacionConsumo { get; set; }
+            public string ClaveMonedaLiquidacion { get; set; }
+            public decimal ParidadLiquidacion { get; set; }
+            public decimal? ImporteCuotaIntercambio { get; set; }
+            public decimal? IvaCuotaIntercambio { get; set; }
+            public decimal? ImporteAplicacionTH { get; set; }
+            public decimal? ImporteConsumoAplicacionTH { get; set; }
+            public decimal? PorcentajeComisionAplicacionTH { get; set; }
+            public string ClaveComercio { get; set; }
+            public string MCCGiroComercio { get; set; }
+            public string NombreComercio { get; set; }
+            public string DireccionComercio { get; set; }
+            public string PaisOrigenTx { get; set; }
+            public string CodigoPostal { get; set; }
+            public string PoblacionComercio { get; set; }
+            public decimal PorcentajeCuotaIntercambio { get; set; }
+            public string FamiliaComercio { get; set; }
+            public string RFCComercio { get; set; }
+            public string EstatusComercio { get; set; }
+            public string NumeroFuente { get; set; }
+            public string NumeroAutorizacion { get; set; }
+            public string BancoReceptor { get; set; }
+            public string ReferenciaTransaccion { get; set; }
+            public string ModoAutorizacion { get; set; }
+            public string IndicadorMedioAcceso { get; set; }
+            public string Diferimiento { get; set; }
+            public string Parcializacion { get; set; }
+            public string TipoPlan { get; set; }
+            public decimal? Sobretasa { get; set; }
+            public decimal? IvaSobretasa { get; set; }
+            public decimal? PorcentajeSobretasa { get; set; }
+            public string IndicadorCobroAutomatico { get; set; }
+            public string FIIDEmisor { get; set; }
+            public string IndicadorDatosCompletosTrack2 { get; set; }
+            public string IndicadorComercioElectronico { get; set; }
+            public string IndicadorColectorAutenticacion { get; set; }
+            public string CapacidadTerminal { get; set; }
+            public string IndicadorTerminalActiva { get; set; }
+            public string TerminalID { get; set; }
+            public string ModoEntradaPos { get; set; }
+            public string IndicadorCV2 { get; set; }
+            public string IndicadorCAVVUCAFAAV { get; set; }
+            public string FIIDAdquirente { get; set; }
+            public string IndicadorPagoInterbancario { get; set; }
+            public string CodigoServicio { get; set; }
+            public string IndicadorPresenciaTH { get; set; }
+            public string IndicadorPresenciaTarjeta { get; set; }
+            public string MetodoDeIdentificacionTH { get; set; }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Models\Prosa\DetailRecord.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\Prosa\HeaderRecord.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Models.Prosa
+    {
+        public class HeaderRecord
+        {
+            public int ArchivoId { get; set; }
+    
+            public string TipoRegistro { get; set; } = "HEADER";
+    
+            public string InstitucionGenera { get; set; } = "PROSA-ENVIA-A:";
+    
+            public string InstitucionRecibe { get; set; }
+    
+            public string LeyendaFijaFecha { get; set; } = "FECHA:";
+    
+            public string FechaProceso { get; set; } // RRMMDD
+    
+            public string LeyendaFijaConsecutivo { get; set; } = "CONSECUTIVO";
+    
+            public string NumeroConsecutivo { get; set; }
+    
+            public string LeyendaFijaTipoProceso { get; set; } = "TIPO-PROCESO:";
+    
+            public string CaracteristicasArchivo { get; set; }
+    
+    
+    
+    
+        }
+    }
+    
+--- Fin del contenido de .\FileProcessor\Core\Models\Prosa\HeaderRecord.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\Prosa\TrailerRecord.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Models.Prosa
+    {
+        public class TrailerRecord
+        {
+            public string TipoRegistro { get; set; } = "TRAILER";
+            public int TotalTransacciones { get; set; }
+            public int TotalVentas { get; set; }
+            public decimal ImporteVentas { get; set; }
+            public int TotalDisposiciones { get; set; }
+            public decimal ImporteDisposiciones { get; set; }
+            public int TotalDebitos { get; set; }
+            public decimal ImporteDebitos { get; set; }
+            public int TotalPagosInterbancarios { get; set; }
+            public decimal ImportePagosInterbancarios { get; set; }
+            public int TotalDevoluciones { get; set; }
+            public decimal ImporteDevoluciones { get; set; }
+            public int TotalCreditos { get; set; }
+            public decimal ImporteCreditos { get; set; }
+            public int TotalRepresentaciones { get; set; }
+            public decimal ImporteRepresentaciones { get; set; }
+            public int TotalContracargos { get; set; }
+            public decimal ImporteContracargos { get; set; }
+            public decimal TotalComisiones { get; set; }
+            public int ArchivoId { get; set; }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Models\Prosa\TrailerRecord.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\RemesaEfectiva\HeaderRecord.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Models.RemesaEfectiva
+    {
+    
+        public class HeaderRecord
+        {
+            public int IdEncabezado { get; set; }
+            public string DatosReporte { get; set; }
+            public DateTime FechaTransmision { get; set; }
+            public DateTime FechaTrabajo { get; set; }
+            public string NombreArchivo { get; set; }
+            public DateTime FechaInsercion { get; set; }
+        }
+    
+    }
+--- Fin del contenido de .\FileProcessor\Core\Models\RemesaEfectiva\HeaderRecord.cs ---
+
+--- Contenido de .\FileProcessor\Core\Models\RemesaEfectiva\TransactionRecord.cs ---
+    using System;
+    using System.Collections.Generic;
+    using FileProcessor.Core.Interfaces;
+    
+    namespace FileProcessor.Core.Models.RemesaEfectiva
+    {
+        public class TransactionRecord : IDataRecord
+        {
+            public int IdEncabezado { get; set; }
+            public int IdOrden { get; set; }
+            public string Transmisor { get; set; }
+            public string Corresponsal { get; set; }
+            public string CveGiro { get; set; }
+            public DateTime FechaStatus { get; set; }
+            public string Status { get; set; }
+            public string DivisaOrigen { get; set; }
+            public decimal ImporteOrigen { get; set; }
+            public decimal TipoCambio { get; set; }
+            public string DivisaDestino { get; set; }
+            public decimal ImporteDestino { get; set; }
+            public string OficinaDestino { get; set; }
+            public string NombreRemitente { get; set; }
+            public string ApellidoPaternoRemitente { get; set; }
+            public string ApellidoMaternoRemitente { get; set; }
+            public string PaisRemitente { get; set; }
+            public string EstadoRemitente { get; set; }
+            public string CiudadRemitente { get; set; }
+            public string DomicilioRemitente { get; set; }
+            public string CodPostalRemitente { get; set; }
+            public string TelefonoRemitente { get; set; }
+            public DateTime FechaAltaBeneficiario { get; set; }
+            public string CurpBeneficiario { get; set; }
+            public string NombreBeneficiario { get; set; }
+            public string ApellidoPaternoBeneficiario { get; set; }
+            public string ApellidoMaternoBeneficiario { get; set; }
+            public string Genero { get; set; }
+            public DateTime FechaNacimientoBeneficiario { get; set; }
+            public string PaisNacimientoBeneficiario { get; set; }
+            public string NacionalidadBeneficiario { get; set; }
+            public string EmailBeneficiario { get; set; }
+            public string TelefonoBeneficiario { get; set; }
+            public string PaisResidenciaBeneficiario { get; set; }
+            public string EstadoDomicilioBeneficiario { get; set; }
+            public string MunicipioDomicilioBeneficiario { get; set; }
+            public string ColoniaDomicilioBeneficiario { get; set; }
+            public string CiudadDomicilioBeneficiario { get; set; }
+            public string CalleDomicilioBeneficiario { get; set; }
+            public string NoExtDomicilioBeneficiario { get; set; }
+            public string NoIntDomicilioBeneficiario { get; set; }
+            public string CpDomicilioBeneficiario { get; set; }
+            public string IsPEP { get; set; }
+            public string OcupacionBeneficiario { get; set; }
+            public string CodIdentificacionBeneficiario { get; set; }
+            public string NumeroIdentificacionBeneficiario { get; set; }
+            public string CveElectorBeneficiario { get; set; }
+            public DateTime FechaVencimientoIdBeneficiario { get; set; }
+            public DateTime FechaUltimaTransaccion { get; set; }
+    
+            public Dictionary<string, object> ToDictionary()
+            {
+                return new Dictionary<string, object>
+                {
+                    { "IdEncabezado", IdEncabezado },
+                    { "IdOrden", IdOrden },
+                    { "Transmisor", Transmisor },
+                    { "Corresponsal", Corresponsal },
+                    { "CveGiro", CveGiro },
+                    { "FechaStatus", FechaStatus },
+                    { "Status", Status },
+                    { "DivisaOrigen", DivisaOrigen },
+                    { "ImporteOrigen", ImporteOrigen },
+                    { "TipoCambio", TipoCambio },
+                    { "DivisaDestino", DivisaDestino },
+                    { "ImporteDestino", ImporteDestino },
+                    { "OficinaDestino", OficinaDestino },
+                    { "NombreRemitente", NombreRemitente },
+                    { "ApellidoPaternoRemitente", ApellidoPaternoRemitente },
+                    { "ApellidoMaternoRemitente", ApellidoMaternoRemitente },
+                    { "PaisRemitente", PaisRemitente },
+                    { "EstadoRemitente", EstadoRemitente },
+                    { "CiudadRemitente", CiudadRemitente },
+                    { "DomicilioRemitente", DomicilioRemitente },
+                    { "CodPostalRemitente", CodPostalRemitente },
+                    { "TelefonoRemitente", TelefonoRemitente },
+                    { "FechaAltaBeneficiario", FechaAltaBeneficiario },
+                    { "CurpBeneficiario", CurpBeneficiario },
+                    { "NombreBeneficiario", NombreBeneficiario },
+                    { "ApellidoPaternoBeneficiario", ApellidoPaternoBeneficiario },
+                    { "ApellidoMaternoBeneficiario", ApellidoMaternoBeneficiario },
+                    { "Genero", Genero },
+                    { "FechaNacimientoBeneficiario", FechaNacimientoBeneficiario },
+                    { "PaisNacimientoBeneficiario", PaisNacimientoBeneficiario },
+                    { "NacionalidadBeneficiario", NacionalidadBeneficiario },
+                    { "EmailBeneficiario", EmailBeneficiario },
+                    { "TelefonoBeneficiario", TelefonoBeneficiario },
+                    { "PaisResidenciaBeneficiario", PaisResidenciaBeneficiario },
+                    { "EstadoDomicilioBeneficiario", EstadoDomicilioBeneficiario },
+                    { "MunicipioDomicilioBeneficiario", MunicipioDomicilioBeneficiario },
+                    { "ColoniaDomicilioBeneficiario", ColoniaDomicilioBeneficiario },
+                    { "CiudadDomicilioBeneficiario", CiudadDomicilioBeneficiario },
+                    { "CalleDomicilioBeneficiario", CalleDomicilioBeneficiario },
+                    { "NoExtDomicilioBeneficiario", NoExtDomicilioBeneficiario },
+                    { "NoIntDomicilioBeneficiario", NoIntDomicilioBeneficiario },
+                    { "CpDomicilioBeneficiario", CpDomicilioBeneficiario },
+                    { "IsPEP", IsPEP },
+                    { "OcupacionBeneficiario", OcupacionBeneficiario },
+                    { "CodIdentificacionBeneficiario", CodIdentificacionBeneficiario },
+                    { "NumeroIdentificacionBeneficiario", NumeroIdentificacionBeneficiario },
+                    { "CveElectorBeneficiario", CveElectorBeneficiario },
+                    { "FechaVencimientoIdBeneficiario", FechaVencimientoIdBeneficiario },
+                    { "FechaUltimaTransaccion", FechaUltimaTransaccion }
+                };
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Models\RemesaEfectiva\TransactionRecord.cs ---
+
+--- Contenido de .\FileProcessor\Core\Services\BahuDataService.cs ---
+    using FileProcessor.Core.Interfaces.Bahu;
+    using FileProcessor.Core.Models.Bahu;
+    using Microsoft.Extensions.Logging;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Core.Services
+    {
+        public class BahuDataService : IBahuDataService
+        {
+            private readonly IAccountRepository _accountRepository;
+            private readonly ICustomerRepository _customerRepository;
+            private readonly IAuthorizationRepository _authorizationRepository;
+            private readonly ILogger<BahuDataService> _logger;
+    
+            public BahuDataService(
+                IAccountRepository accountRepository,
+                ICustomerRepository customerRepository,
+                IAuthorizationRepository authorizationRepository,
+                ILogger<BahuDataService> logger)
+            {
+                _accountRepository = accountRepository;
+                _customerRepository = customerRepository;
+                _authorizationRepository = authorizationRepository;
+                _logger = logger;
+            }
+    
+            public async Task SaveAccountsAsync(IEnumerable<Account> accounts)
+            {
+                try
+                {
+                    await _accountRepository.InsertAccountsAsync(accounts);
+                    _logger.LogInformation("Accounts saved successfully.");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error saving accounts.");
+                    throw;
+                }
+            }
+    
+            public async Task SaveCustomersAsync(IEnumerable<Customer> customers)
+            {
+                try
+                {
+                    await _customerRepository.InsertCustomersAsync(customers);
+                    _logger.LogInformation("Customers saved successfully.");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error saving customers.");
+                    throw;
+                }
+            }
+    
+            public async Task SaveAuthorizationsAsync(IEnumerable<Authorization> authorizations)
+            {
+                try
+                {
+                    await _authorizationRepository.InsertAuthorizationsAsync(authorizations);
+                    _logger.LogInformation("Authorizations saved successfully.");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error saving authorizations.");
+                    throw;
+                }
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Services\BahuDataService.cs ---
+
+--- Contenido de .\FileProcessor\Core\Services\ProsaPosteoService.cs ---
+    using FileProcessor.Core.Models.Prosa;
+    using FileProcessor.Infrastructure.Data.Prosa;
+    using Microsoft.Data.SqlClient;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+    using FileProcessor.Core.Interfaces.Prosa;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Serilog.Context;
+    using System.Diagnostics;
+    
+    namespace FileProcessor.Core.Services
+    {
+        public class ProsaPosteoService
+        {
+    
+            //private readonly ArchivosProcesadosRepository _archivosProcesadosRepository; // Inyectar el nuevo repositorio
+            private readonly IHeaderRepository _headerRepository;
+            private readonly IDetailRepository _detailRepository;
+            private readonly IDetailEMVRepository _detailEMVRepository;
+            private readonly ITrailerRepository _trailerRepository; 
+            private readonly string _connectionString;
+            //private IConfiguration configuration;
+            private readonly IArchivosProcesadosRepository _archivosProcesadosRepository;
+            private readonly ILogger<ProsaPosteoService> _logger;
+            private readonly IConfiguration _configuration;
+    
+    
+    
+            //public ProsaPosteoService(
+            //    //ArchivosProcesadosRepository archivosProcesadosRepository, // Inyectar el nuevo repositorio
+            //    //HeaderRepository headerRepository,
+            //    //DetailRepository detailRepository,
+            //    //DetailEMVRepository detailEMVRepository,
+            //    //TrailerRepository trailerRepository,
+            //    //IConfiguration configuration)
+            //    )
+            //{
+            //    //_archivosProcesadosRepository = archivosProcesadosRepository;
+            //    //_headerRepository = headerRepository;
+            //    //_detailRepository = detailRepository;
+            //    //_detailEMVRepository = detailEMVRepository;
+            //    //_trailerRepository = trailerRepository;
+            //    _connectionString = configuration.GetConnectionString("DataBase");
+            //}
+            public ProsaPosteoService(
+            IArchivosProcesadosRepository archivosProcesadosRepository,
+            IHeaderRepository headerRepository,
+            IDetailRepository detailRepository,
+            IDetailEMVRepository detailEMVRepository,
+            ITrailerRepository trailerRepository,
+            ILogger<ProsaPosteoService> logger, IConfiguration configuration)
+            {
+                _archivosProcesadosRepository = archivosProcesadosRepository ?? throw new ArgumentNullException(nameof(archivosProcesadosRepository));
+                _headerRepository = headerRepository ?? throw new ArgumentNullException(nameof(headerRepository));
+                _detailRepository = detailRepository ?? throw new ArgumentNullException(nameof(detailRepository));
+                _detailEMVRepository = detailEMVRepository ?? throw new ArgumentNullException(nameof(detailEMVRepository));
+                _trailerRepository = trailerRepository ?? throw new ArgumentNullException(nameof(trailerRepository));
+                _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+                _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+                _connectionString = _configuration.GetConnectionString("DataBase")
+                    ?? throw new ArgumentNullException("Connection string 'DataBase' not found in configuration");
+    
+            }
+            public async Task<bool> IsFileAlreadyProcessed(string fileName)
+            {
+                if (string.IsNullOrWhiteSpace(fileName))
+                {
+                    _logger.LogWarning("Se recibió un nombre de archivo vacío al verificar si ya fue procesado");
+                    throw new ArgumentException("El nombre del archivo no puede estar vacío", nameof(fileName));
+                }
+    
+                using (LogContext.PushProperty("FileName", fileName))
+                {
+                    _logger.LogInformation("Verificando si el archivo ya fue procesado");
+    
+                    try
+                    {
+                        var stopwatch = Stopwatch.StartNew();
+                        bool isProcessed = await _archivosProcesadosRepository.IsFileAlreadyProcessed(fileName);
+                        stopwatch.Stop();
+    
+                        _logger.LogDebug("Verificación completada en {ElapsedMilliseconds}ms. Resultado: {IsProcessed}",
+                            stopwatch.ElapsedMilliseconds, isProcessed);
+    
+                        return isProcessed;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error al verificar si el archivo ya fue procesado");
+                        throw new ApplicationException($"Error al verificar el archivo {fileName}", ex);
+                    }
+                }
+                
+            }
+    
+    
+            public async Task<bool> InsertAllRecordsTransactional(
+                ArchivosProcesadosRecord archivosProcesadosRecord, // Recibir el registro de ArchivosProcesados
+                HeaderRecord headerRecord,
+                List<DetailRecord> detailRecords,
+                List<DetailEMVRecord> detalleEMVRecords,
+                TrailerRecord trailerRecord)
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            // Insertar en ArchivosProcesados y obtener el ArchivoId
+                            int archivoId = _archivosProcesadosRepository.InsertArchivosProcesadosRecord(archivosProcesadosRecord, transaction);
+                            if (archivoId == 0)
+                            {
+                                transaction.Rollback();
+                                return false;
+                            }
+    
+                            // Asignar el ArchivoId a los registros relacionados
+                            headerRecord.ArchivoId= archivoId;
+                            detailRecords.ForEach(d => d.ArchivoId = archivoId);
+                            detalleEMVRecords.ForEach(e => e.DetalleId = archivoId); // Asumiendo que DetalleId se relaciona con ArchivoId
+                            trailerRecord.ArchivoId = archivoId;
+    
+                            // Insertar en Header
+                            if (!_headerRepository.InsertHeaderRecords(headerRecord, transaction))
+                            {
+                                transaction.Rollback();
+                                return false;
+                            }
+    
+                            // Insertar en Detail
+                            if (!_detailRepository.InsertDetailRecords(detailRecords, transaction))
+                            {
+                                transaction.Rollback();
+                                return false;
+                            }
+    
+                            // Insertar en DetalleEMV
+                            if (!_detailEMVRepository.InsertDetalleEMVRecords(detalleEMVRecords, transaction))
+                            {
+                                transaction.Rollback();
+                                return false;
+                            }
+    
+                            // Insertar en Trailer
+                            if (!_trailerRepository.InsertTrailerRecords(trailerRecord, transaction))
+                            {
+                                transaction.Rollback();
+                                return false;
+                            }
+    
+                            transaction.Commit();
+                            return true;
+                        }
+                        catch (Exception)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Services\ProsaPosteoService.cs ---
+
+--- Contenido de .\FileProcessor\Core\Services\RemesaEfectivaService.cs ---
+    using FileProcessor.Core.Models.RemesaEfectiva;
+    using FileProcessor.Infrastructure.Data.RemesaEfectiva;
+    using Microsoft.Data.SqlClient;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+    using FileProcessor.Core.Interfaces.RemesaEfectiva;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Serilog.Context;
+    using System.Diagnostics;
+    using FileProcessor.Core.Interfaces.RemesaEfectiva;
+    using FileProcessor.Core.Models.RemesaEfectiva;
+    using System.Data;
+    
+    namespace FileProcessor.Core.Services
+    {
+        public class RemesaEfectivaService
+        {
+            //private readonly ArchivosProcesadosRepository _archivosProcesadosRepository; // Inyectar el nuevo repositorio
+            private readonly IConfiguration _configuration;
+            private readonly IHeaderRepository _headerRepository;
+            private readonly ITransactionRepository _transactionRepository;
+    
+            private readonly string _connectionString;
+            //private IConfiguration configuration;
+            private readonly ILogger<RemesaEfectivaService> _logger;
+    
+    
+    
+            public RemesaEfectivaService(
+            IHeaderRepository headerRepository,
+            ITransactionRepository transactionRepository,
+            ILogger<RemesaEfectivaService> logger, IConfiguration configuration)
+            {
+                 _headerRepository = headerRepository ?? throw new ArgumentNullException(nameof(headerRepository));
+                _transactionRepository = transactionRepository ?? throw new ArgumentNullException(nameof(transactionRepository));
+                _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+                _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+                _connectionString = _configuration.GetConnectionString("DataBase")
+                    ?? throw new ArgumentNullException("Connection string 'DataBase' not found in configuration");
+    
+            }
+            public async Task<bool> IsFileAlreadyProcessed(string fileName)
+            {
+                if (string.IsNullOrWhiteSpace(fileName))
+                {
+                    _logger.LogWarning("Se recibió un nombre de archivo vacío al verificar si ya fue procesado");
+                    throw new ArgumentException("El nombre del archivo no puede estar vacío", nameof(fileName));
+                }
+    
+                using (LogContext.PushProperty("FileName", fileName))
+                {
+                    _logger.LogInformation("Verificando si el archivo ya fue procesado");
+    
+                    try
+                    {
+                        var stopwatch = Stopwatch.StartNew();
+                        bool isProcessed = await _headerRepository.IsFileAlreadyProcessed(fileName);
+                        stopwatch.Stop();
+    
+                        _logger.LogDebug("Verificación completada en {ElapsedMilliseconds}ms. Resultado: {IsProcessed}",
+                            stopwatch.ElapsedMilliseconds, isProcessed);
+    
+                        return isProcessed;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error al verificar si el archivo ya fue procesado");
+                        throw new ApplicationException($"Error al verificar el archivo {fileName}", ex);
+                    }
+                }
+    
+            }
+    
+    
+            public async Task<bool> InsertTransactionRecords(
+                HeaderRecord headerRecord,
+                List<TransactionRecord> transactionRecords
+                )
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            // Insertar en ArchivosProcesados y obtener el ArchivoId
+                            int archivoId = _headerRepository.InsertHeaderRecords(headerRecord, transaction);
+                            if (archivoId == 0)
+                            {
+                                transaction.Rollback();
+                                return false;
+                            }
+    
+                            // Asignar el ArchivoId a los registros relacionados
+                            headerRecord.IdEncabezado = archivoId;
+                            transactionRecords.ForEach(d => d.IdEncabezado = archivoId);
+    
+    
+                            // Insertar en remesa_efectiva_transacciones 
+                            if (!_transactionRepository.InsertTransactionRecords(transactionRecords, transaction))
+                            {
+                                transaction.Rollback();
+                                return false;
+                            }                       
+    
+                            transaction.Commit();
+                            return true;
+                        }
+                        catch (Exception)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Core\Services\RemesaEfectivaService.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\Data\Bahu\AccountRepository.cs ---
+    using FileProcessor.Core.Interfaces.Bahu;
+    using FileProcessor.Core.Models.Bahu;
+    using Microsoft.Extensions.Configuration;
+    using System.Collections.Generic;
+    using System.Data;
+    using Dapper;
+    using Microsoft.Data.SqlClient;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Infrastructure.Data.Bahu
+    {
+        public class AccountRepository : IAccountRepository
+        {
+            private readonly string _connectionString;
+    
+            public AccountRepository(IConfiguration configuration)
+            {
+                _connectionString = configuration.GetConnectionString("BahuDb"); // Asegúrate de tener esta cadena de conexión en appsettings.json
+            }
+    
+            public async Task<Account> GetAccountByIdAsync(int accountId)
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    return await connection.QueryFirstOrDefaultAsync<Account>("SELECT * FROM Accounts WHERE account_id = @AccountId", new { AccountId = accountId });
+                }
+            }
+    
+            public async Task InsertAccountAsync(Account account)
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    string sql = @"
+                        INSERT INTO Accounts (product_id, pocket_name, customer_id, account_id, card_id, masked_pan, pan_last_four_digits, 
+                                            expiration_date, activation_date, card_status, card_status_change_date, physical_card_request_date,
+                                            embossing_request_date, account_status, shipping_street_number, shipping_unit_number, shipping_address,
+                                            shipping_additional_address, shipping_city, shipping_zipcode, short_customer_name, ArchivoId)
+                        VALUES (@ProductId, @PocketName, @CustomerId, @AccountId, @CardId, @MaskedPan, @PanLastFourDigits, 
+                                @ExpirationDate, @ActivationDate, @CardStatus, @CardStatusChangeDate, @PhysicalCardRequestDate,
+                                @EmbossingRequestDate, @AccountStatus, @ShippingStreetNumber, @ShippingUnitNumber, @ShippingAddress,
+                                @ShippingAdditionalAddress, @ShippingCity, @ShippingZipcode, @ShortCustomerName, @ArchivoId);";
+                    await connection.ExecuteAsync(sql, account);
+                }
+            }
+    
+            public async Task InsertAccountsAsync(IEnumerable<Account> accounts)
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            string sql = @"
+                                INSERT INTO Accounts (product_id, pocket_name, customer_id, account_id, card_id, masked_pan, pan_last_four_digits, 
+                                                    expiration_date, activation_date, card_status, card_status_change_date, physical_card_request_date,
+                                                    embossing_request_date, account_status, shipping_street_number, shipping_unit_number, shipping_address,
+                                                    shipping_additional_address, shipping_city, shipping_zipcode, short_customer_name, ArchivoId)
+                                VALUES (@ProductId, @PocketName, @CustomerId, @AccountId, @CardId, @MaskedPan, @PanLastFourDigits, 
+                                        @ExpirationDate, @ActivationDate, @CardStatus, @CardStatusChangeDate, @PhysicalCardRequestDate,
+                                        @EmbossingRequestDate, @AccountStatus, @ShippingStreetNumber, @ShippingUnitNumber, @ShippingAddress,
+                                        @ShippingAdditionalAddress, @ShippingCity, @ShippingZipcode, @ShortCustomerName, @ArchivoId);";
+                            await connection.ExecuteAsync(sql, accounts, transaction);
+                            transaction.Commit();
+                        }
+                        catch (Exception)
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
+                    }
+                }
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\Data\Bahu\AccountRepository.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\Data\Bahu\AuthorizationRepository.cs ---
+    using FileProcessor.Core.Interfaces.Bahu;
+    using FileProcessor.Core.Models.Bahu;
+    using Microsoft.Extensions.Configuration;
+    using System.Collections.Generic;
+    using System.Data;
+    using Dapper;
+    using Microsoft.Data.SqlClient;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Infrastructure.Data.Bahu
+    {
+        public class AuthorizationRepository : IAuthorizationRepository
+        {
+            private readonly string _connectionString;
+    
+            public AuthorizationRepository(IConfiguration configuration)
+            {
+                _connectionString = configuration.GetConnectionString("BahuDb"); // Asegúrate de tener esta cadena de conexión en appsettings.json
+            }
+    
+            public async Task<Authorization> GetAuthorizationByIdAsync(int movementId)
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    return await connection.QueryFirstOrDefaultAsync<Authorization>("SELECT * FROM Authorizations WHERE movement_id = @MovementId", new { MovementId = movementId });
+                }
+            }
+    
+            public async Task InsertAuthorizationAsync(Authorization authorization)
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    string sql = @"
+                        INSERT INTO Authorizations (product_id, pocket_name, customer_id, account_id, create_date, movement_id, 
+                                                operation_id, merchant_location, country, amount, currency_id, fee_amount, 
+                                                total_amount, iso_response_code, authorization_number, movement_status, force_flag, 
+                                                cashback_amount, contactless_flag, present_card_flag, check_inout_flag, merchant_id, 
+                                                merchant_category_code, acquirer_bin, iso_card_acceptor_terminal_id, terminal_capabilities, 
+                                                pos_entry_mode, entry_type, reversal_flag, ArchivoId)
+                        VALUES (@ProductId, @PocketName, @CustomerId, @AccountId, @CreateDate, @MovementId, 
+                                @OperationId, @MerchantLocation, @Country, @Amount, @CurrencyId, @FeeAmount, 
+                                @TotalAmount, @IsoResponseCode, @AuthorizationNumber, @MovementStatus, @ForceFlag, 
+                                @CashbackAmount, @ContactlessFlag, @PresentCardFlag, @CheckInOutFlag, @MerchantId, 
+                                @MerchantCategoryCode, @AcquirerBin, @IsoCardAcceptorTerminalId, @TerminalCapabilities, 
+                                @PosEntryMode, @EntryType, @ReversalFlag, @ArchivoId);";
+                    await connection.ExecuteAsync(sql, authorization);
+                }
+            }
+    
+            public async Task InsertAuthorizationsAsync(IEnumerable<Authorization> authorizations)
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            string sql = @"
+                                INSERT INTO Authorizations (product_id, pocket_name, customer_id, account_id, create_date, movement_id, 
+                                                        operation_id, merchant_location, country, amount, currency_id, fee_amount, 
+                                                        total_amount, iso_response_code, authorization_number, movement_status, force_flag, 
+                                                        cashback_amount, contactless_flag, present_card_flag, check_inout_flag, merchant_id, 
+                                                        merchant_category_code, acquirer_bin, iso_card_acceptor_terminal_id, terminal_capabilities, 
+                                                        pos_entry_mode, entry_type, reversal_flag, ArchivoId)
+                                VALUES (@ProductId, @PocketName, @CustomerId, @AccountId, @CreateDate, @MovementId, 
+                                        @OperationId, @MerchantLocation, @Country, @Amount, @CurrencyId, @FeeAmount, 
+                                        @TotalAmount, @IsoResponseCode, @AuthorizationNumber, @MovementStatus, @ForceFlag, 
+                                        @CashbackAmount, @ContactlessFlag, @PresentCardFlag, @CheckInOutFlag, @MerchantId, 
+                                        @MerchantCategoryCode, @AcquirerBin, @IsoCardAcceptorTerminalId, @TerminalCapabilities, 
+                                        @PosEntryMode, @EntryType, @ReversalFlag, @ArchivoId);";
+                            await connection.ExecuteAsync(sql, authorizations, transaction);
+                            transaction.Commit();
+                        }
+                        catch (Exception)
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
+                    }
+                }
+            }
+        }
+    }   
+--- Fin del contenido de .\FileProcessor\Infrastructure\Data\Bahu\AuthorizationRepository.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\Data\Bahu\CustomerRepository.cs ---
+    using FileProcessor.Core.Interfaces.Bahu;
+    using FileProcessor.Core.Models.Bahu;
+    using Microsoft.Extensions.Configuration;
+    using System.Collections.Generic;
+    using System.Data;
+    using Dapper;
+    using Microsoft.Data.SqlClient;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Infrastructure.Data.Bahu
+    {
+        public class CustomerRepository : ICustomerRepository
+        {
+            private readonly string _connectionString;
+    
+            public CustomerRepository(IConfiguration configuration)
+            {
+                _connectionString = configuration.GetConnectionString("BahuDb"); // Asegúrate de tener esta cadena de conexión en appsettings.json
+            }
+    
+            public async Task<Customer> GetCustomerByIdAsync(int customerId)
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    return await connection.QueryFirstOrDefaultAsync<Customer>("SELECT * FROM Customers WHERE customer_id = @CustomerId", new { CustomerId = customerId });
+                }
+            }
+    
+            public async Task InsertCustomerAsync(Customer customer)
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    string sql = @"
+                        INSERT INTO Customers (product_id, pocket_name, name, additional_name, last_name, additional_last_name, 
+                                            street_number, unit_number, address, additional_address, city, state, zipcode, 
+                                            phone_number, birthdate, birth_country_id, email, fiscal_id, occupation, county, 
+                                            residence_place, risk_level, customer_id, creation_date, account_id, status, 
+                                            status_change_date, lock_date, balance, retained_balance, last_transaction_date, ArchivoId)
+                        VALUES (@ProductId, @PocketName, @Name, @AdditionalName, @LastName, @AdditionalLastName, 
+                                @StreetNumber, @UnitNumber, @Address, @AdditionalAddress, @City, @State, @Zipcode, 
+                                @PhoneNumber, @Birthdate, @BirthCountryId, @Email, @FiscalId, @Occupation, @County, 
+                                @ResidencePlace, @RiskLevel, @CustomerId, @CreationDate, @AccountId, @Status, 
+                                @StatusChangeDate, @LockDate, @Balance, @RetainedBalance, @LastTransactionDate, @ArchivoId);";
+                    await connection.ExecuteAsync(sql, customer);
+                }
+            }
+    
+            public async Task InsertCustomersAsync(IEnumerable<Customer> customers)
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            string sql = @"
+                                INSERT INTO Customers (product_id, pocket_name, name, additional_name, last_name, additional_last_name, 
+                                                    street_number, unit_number, address, additional_address, city, state, zipcode, 
+                                                    phone_number, birthdate, birth_country_id, email, fiscal_id, occupation, county, 
+                                                    residence_place, risk_level, customer_id, creation_date, account_id, status, 
+                                                    status_change_date, lock_date, balance, retained_balance, last_transaction_date, ArchivoId)
+                                VALUES (@ProductId, @PocketName, @Name, @AdditionalName, @LastName, @AdditionalLastName, 
+                                        @StreetNumber, @UnitNumber, @Address, @AdditionalAddress, @City, @State, @Zipcode, 
+                                        @PhoneNumber, @Birthdate, @BirthCountryId, @Email, @FiscalId, @Occupation, @County, 
+                                        @ResidencePlace, @RiskLevel, @CustomerId, @CreationDate, @AccountId, @Status, 
+                                        @StatusChangeDate, @LockDate, @Balance, @RetainedBalance, @LastTransactionDate, @ArchivoId);";
+                            await connection.ExecuteAsync(sql, customers, transaction);
+                            transaction.Commit();
+                        }
+                        catch (Exception)
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
+                    }
+                }
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\Data\Bahu\CustomerRepository.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\Data\Prosa\ArchivosProcesadosRepository.cs ---
+    using FileProcessor.Core.Models.Prosa;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using Dapper;
+    using FileProcessor.Core.Models;
+    using Microsoft.Data.SqlClient;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+    using FileProcessor.Core.Interfaces.Prosa;
+    
+    namespace FileProcessor.Infrastructure.Data.Prosa
+    {
+        public class ArchivosProcesadosRepository:IArchivosProcesadosRepository
+        {
+            private readonly string _connectionString;
+            private readonly IConfiguration _configuration;
+    
+            // Constructor modificado para recibir IConfiguration
+            public ArchivosProcesadosRepository(IConfiguration configuration)
+            {
+                _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+                _connectionString = _configuration.GetConnectionString("DataBase")
+                    ?? throw new ArgumentNullException("Connection string 'DataBase' not found in configuration");
+            }
+            public async Task<bool> IsFileAlreadyProcessed(string fileName)
+            {
+                using var connection = new SqlConnection(_connectionString);
+    
+                var sql = @"SELECT 1 FROM ArchivosProcesados 
+                           WHERE NombreArchivo = @fileName";
+    
+                var result = await connection.QueryFirstOrDefaultAsync<int?>(sql, new { fileName });
+    
+                return result.HasValue;
+            }
+            public async Task<int> RegisterFileProcessing(string fileName, int totalRecords)
+            {
+                
+    
+                using var connection = new SqlConnection(_connectionString);
+    
+                var sql = @"INSERT INTO ArchivosProcesados 
+                           (NombreArchivo, FechaProcesamiento, TotalRegistros, RegistrosCargados)
+                           OUTPUT INSERTED.ArchivoId
+                           VALUES (@fileName, GETDATE(), @totalRecords, 0)";
+    
+                try
+                {
+                    return await connection.ExecuteScalarAsync<int>(sql, new { fileName, totalRecords });
+                }
+                catch (Exception ex)
+                {
+                    //_logger.LogError(ex, "Error al registrar el archivo para procesamiento");
+                    throw;
+                }
+            }
+            public int InsertArchivosProcesadosRecord(ArchivosProcesadosRecord record, IDbTransaction transaction)
+            {
+                try
+                {
+                    var sql = @"
+                        INSERT INTO ArchivosProcesados (
+                            NombreArchivo, FechaProcesamiento, TotalRegistros, RegistrosCargados
+                        ) VALUES (
+                            @NombreArchivo, @FechaProcesamiento, @TotalRegistros, @RegistrosCargados
+                        );
+                        SELECT CAST(SCOPE_IDENTITY() as int);"; // Obtener el ID insertado
+    
+                    return transaction.Connection.QuerySingle<int>(sql, record, transaction);
+                }
+                catch (Exception)
+                {
+                    return 0; // O lanzar una excepción, dependiendo de tu manejo de errores
+                }
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\Data\Prosa\ArchivosProcesadosRepository.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\Data\Prosa\DetailEMVRepository.cs ---
+    using FileProcessor.Core.Models.Prosa;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using Dapper;
+    using FileProcessor.Core.Models;
+    using Microsoft.Data.SqlClient;
+    using Microsoft.Extensions.Configuration;
+    using FileProcessor.Core.Interfaces.Prosa;
+    
+    namespace FileProcessor.Infrastructure.Data.Prosa
+    {
+        public class DetailEMVRepository:IDetailEMVRepository
+        {
+            public bool InsertDetalleEMVRecords(List<DetailEMVRecord> records, IDbTransaction transaction)
+            {
+                try
+                {
+                    var sql = @"
+                        INSERT INTO DetalleEMV (
+                            DetalleId, NumeroAutorizacion, NumeroCuenta, TipoRegistro, ApplicationCryptogram, 
+                            CryptogramInformationData, IssuerApplicationData, UnpredictableNumber, 
+                            ApplicationTransactionCounter, TerminalVerificationResult, TransactionDate, 
+                            TransactionType, AmountAuthorized, TransactionCurrencyCode, 
+                            ApplicationInterchangeProfile, TerminalCountryCode, AmountOther, 
+                            CardholderVerificationMethod, TerminalCapabilities, TerminalType, 
+                            InterfaceDeviceSerialNumber, DedicatedFileName, 
+                            TerminalApplicationVersionNumber, IssuerAuthenticationData
+                        ) VALUES (
+                            @DetalleId, @NumeroAutorizacion, @NumeroCuenta, @TipoRegistro, @ApplicationCryptogram, 
+                            @CryptogramInformationData, @IssuerApplicationData, @UnpredictableNumber, 
+                            @ApplicationTransactionCounter, @TerminalVerificationResult, @TransactionDate, 
+                            @TransactionType, @AmountAuthorized, @TransactionCurrencyCode, 
+                            @ApplicationInterchangeProfile, @TerminalCountryCode, @AmountOther, 
+                            @CardholderVerificationMethod, @TerminalCapabilities, @TerminalType, 
+                            @InterfaceDeviceSerialNumber, @DedicatedFileName, 
+                            @TerminalApplicationVersionNumber, @IssuerAuthenticationData
+                        );";
+    
+                    transaction.Connection.Execute(sql, records, transaction);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\Data\Prosa\DetailEMVRepository.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\Data\Prosa\DetailRepository.cs ---
+    using FileProcessor.Core.Models.Prosa;
+    using Microsoft.Extensions.Configuration;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using Dapper;
+    using FileProcessor.Core.Models;
+    using Microsoft.Data.SqlClient;
+    using FileProcessor.Core.Interfaces.Prosa;
+    
+    namespace FileProcessor.Infrastructure.Data.Prosa
+    {
+        public class DetailRepository : IDetailRepository
+        {
+            //private readonly string _connectionString;
+    
+            //public DetailRepository(IConfiguration configuration)
+            //{
+            //    _connectionString = configuration.GetConnectionString("DefaultConnection");
+            //}
+    
+            public bool InsertDetailRecords(List<DetailRecord> records, IDbTransaction transaction)
+            {
+                try
+                {
+                    var sql = @"
+                        INSERT INTO Detalle (
+                            ArchivoId, BancoEmisor, NumeroCuenta, NaturalezaContable, MarcaProducto, FechaConsumo, HoraConsumo, 
+                            FechaProceso, TipoTransaccion, NumeroLiquidacion, ImporteOrigenTotal, ImporteOrigenConsumo, 
+                            ClaveMonedaOrigen, ImporteDestinoTotal, ImporteDestinoConsumo, ClaveMonedaDestino, ParidadDestino, 
+                            ImporteLiquidacionTotal, ImporteLiquidacionConsumo, ClaveMonedaLiquidacion, ParidadLiquidacion, 
+                            ImporteCuotaIntercambio, IvaCuotaIntercambio, ImporteAplicacionTH, ImporteConsumoAplicacionTH, 
+                            PorcentajeComisionAplicacionTH, ClaveComercio, MCCGiroComercio, NombreComercio, DireccionComercio, 
+                            PaisOrigenTx, CodigoPostal, PoblacionComercio, PorcentajeCuotaIntercambio, FamiliaComercio, 
+                            RFCComercio, EstatusComercio, NumeroFuente, NumeroAutorizacion, BancoReceptor, ReferenciaTransaccion, 
+                            ModoAutorizacion, IndicadorMedioAcceso, Diferimiento, Parcializacion, TipoPlan, Sobretasa, 
+                            IvaSobretasa, PorcentajeSobretasa, IndicadorCobroAutomatico, FIIDEmisor, IndicadorDatosCompletosTrack2, 
+                            IndicadorComercioElectronico, IndicadorColectorAutenticacion, CapacidadTerminal, IndicadorTerminalActiva, 
+                            TerminalID, ModoEntradaPos, IndicadorCV2, IndicadorCAVVUCAFAAV, FIIDAdquirente, IndicadorPagoInterbancario, 
+                            CodigoServicio
+                        ) VALUES (
+                            @ArchivoId, @BancoEmisor, @NumeroCuenta, @NaturalezaContable, @MarcaProducto, @FechaConsumo, @HoraConsumo, 
+                            @FechaProceso, @TipoTransaccion, @NumeroLiquidacion, @ImporteOrigenTotal, @ImporteOrigenConsumo, 
+                            @ClaveMonedaOrigen, @ImporteDestinoTotal, @ImporteDestinoConsumo, @ClaveMonedaDestino, @ParidadDestino, 
+                            @ImporteLiquidacionTotal, @ImporteLiquidacionConsumo, @ClaveMonedaLiquidacion, @ParidadLiquidacion, 
+                            @ImporteCuotaIntercambio, @IvaCuotaIntercambio, @ImporteAplicacionTH, @ImporteConsumoAplicacionTH, 
+                            @PorcentajeComisionAplicacionTH, @ClaveComercio, @MCCGiroComercio, @NombreComercio, @DireccionComercio, 
+                            @PaisOrigenTx, @CodigoPostal, @PoblacionComercio, @PorcentajeCuotaIntercambio, @FamiliaComercio, 
+                            @RFCComercio, @EstatusComercio, @NumeroFuente, @NumeroAutorizacion, @BancoReceptor, @ReferenciaTransaccion, 
+                            @ModoAutorizacion, @IndicadorMedioAcceso, @Diferimiento, @Parcializacion, @TipoPlan, @Sobretasa, 
+                            @IvaSobretasa, @PorcentajeSobretasa, @IndicadorCobroAutomatico, @FIIDEmisor, @IndicadorDatosCompletosTrack2, 
+                            @IndicadorComercioElectronico, @IndicadorColectorAutenticacion, @CapacidadTerminal, @IndicadorTerminalActiva, 
+                            @TerminalID, @ModoEntradaPos, @IndicadorCV2, @IndicadorCAVVUCAFAAV, @FIIDAdquirente, @IndicadorPagoInterbancario, 
+                            @CodigoServicio
+                        );";
+    
+                    transaction.Connection.Execute(sql, records, transaction);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\Data\Prosa\DetailRepository.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\Data\Prosa\HeaderRepository.cs ---
+    using FileProcessor.Core.Models.Prosa;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using Dapper;
+    using FileProcessor.Core.Models;
+    using Microsoft.Data.SqlClient;
+    using Microsoft.Extensions.Configuration;
+    using FileProcessor.Core.Interfaces.Prosa;
+    
+    namespace FileProcessor.Infrastructure.Data.Prosa
+    {
+        public class HeaderRepository: IHeaderRepository
+        {
+            
+            public bool InsertHeaderRecords(HeaderRecord record, IDbTransaction transaction)
+            {
+                try
+                {
+                    var sql = @"
+                        INSERT INTO Header (
+                            ArchivoId, TipoRegistro, InstitucionGenera, InstitucionRecibe, FechaProceso, 
+                            NumeroConsecutivo, CaracteristicasArchivo
+                        ) VALUES (
+                            @ArchivoId, @TipoRegistro, @InstitucionGenera, @InstitucionRecibe, @FechaProceso, 
+                            @NumeroConsecutivo, @CaracteristicasArchivo
+                        );";
+    
+                    transaction.Connection.Execute(sql, record, transaction);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+    
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\Data\Prosa\HeaderRepository.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\Data\Prosa\TrailerRepository.cs ---
+    using FileProcessor.Core.Models.Prosa;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using Dapper;
+    using FileProcessor.Core.Models;
+    using Microsoft.Data.SqlClient;
+    using Microsoft.Extensions.Configuration;
+    using FileProcessor.Core.Interfaces.Prosa;
+    
+    namespace FileProcessor.Infrastructure.Data.Prosa
+    {
+        public class TrailerRepository:ITrailerRepository
+        {
+            public bool InsertTrailerRecords(TrailerRecord records, IDbTransaction transaction)
+            {
+                try
+                {
+                    var sql = @"
+                        INSERT INTO Trailer (
+                            ArchivoId, TipoRegistro, TotalTransacciones, TotalVentas, ImporteVentas, 
+                            TotalDisposiciones, ImporteDisposiciones, TotalDebitos, ImporteDebitos, 
+                            TotalPagosInterbancarios, ImportePagosInterbancarios, TotalDevoluciones, 
+                            ImporteDevoluciones, TotalCreditos, ImporteCreditos, TotalRepresentaciones, 
+                            ImporteRepresentaciones, TotalContracargos, ImporteContracargos, TotalComisiones
+                        ) VALUES (
+                            @ArchivoId, @TipoRegistro, @TotalTransacciones, @TotalVentas, @ImporteVentas, 
+                            @TotalDisposiciones, @ImporteDisposiciones, @TotalDebitos, @ImporteDebitos, 
+                            @TotalPagosInterbancarios, @ImportePagosInterbancarios, @TotalDevoluciones, 
+                            @ImporteDevoluciones, @TotalCreditos, @ImporteCreditos, @TotalRepresentaciones, 
+                            @ImporteRepresentaciones, @TotalContracargos, @ImporteContracargos, @TotalComisiones
+                            
+                        );";
+    
+                    transaction.Connection.Execute(sql, records, transaction);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\Data\Prosa\TrailerRepository.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\Data\RemesaEfectiva\TransactionRepository.cs ---
+    using FileProcessor.Core.Models.RemesaEfectiva;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using Dapper;
+    using FileProcessor.Core.Interfaces.RemesaEfectiva;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Data.SqlClient;
+    
+    namespace FileProcessor.Infrastructure.Data.RemesaEfectiva
+    {
+        public class TransactionRepository : ITransactionRepository,IHeaderRepository
+        {
+            private readonly string _connectionString;
+            private readonly IConfiguration _configuration;
+            public TransactionRepository(IConfiguration configuration)
+            {
+                _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+                _connectionString = _configuration.GetConnectionString("RemesaEfectiva")
+                    ?? throw new ArgumentNullException("Connection string 'DataBase' not found in configuration");
+            }
+    
+            public async Task<bool> IsFileAlreadyProcessed(string fileName)
+            {
+                using var connection = new SqlConnection(_connectionString);
+    
+                var sql = @"SELECT 1 FROM encabezado_archivo 
+                           WHERE nombre_archivo = @fileName";
+    
+                var result = await connection.QueryFirstOrDefaultAsync<int?>(sql, new { fileName });
+    
+                return result.HasValue;
+            }
+            public bool InsertTransactionRecords(List<TransactionRecord> records, IDbTransaction transaction)
+            {
+                try
+                {
+                    var sql = @"
+                        INSERT INTO remesa_efectiva_transacciones (
+                            id_encabezado, id_orden, transmisor, corresponsal, cve_giro, fecha_status, status,
+                            divisa_origen, importe_origen, tipo_cambio, divisa_destino, importe_destino,
+                            oficina_destino, nombre_remitente, apellido_paterno_remitente, apellido_materno_remitente,
+                            pais_remitente, estado_remitente, ciudad_remitente, domicilio_remitente, cod_postal_remitente,
+                            telefono_remitente, fecha_alta_beneficiario, curp_beneficiario, nombre_beneficiario,
+                            apellido_paterno_beneficiario, apellido_materno_beneficiario, genero, fecha_nacimiento_beneficiario,
+                            pais_nacimiento_beneficiario, nacionalidad_beneficiario, email_beneficiario, telefono_beneficiario,
+                            pais_residencia_beneficiario, estado_domicilio_beneficiario, municipio_domicilio_beneficiario,
+                            colonia_domicilio_beneficiario, ciudad_domicilio_beneficiario, calle_domicilio_beneficiario,
+                            no_ext_domicilio_beneficiario, no_int_domicilio_beneficiario, cp_domicilio_beneficiario,
+                            isPEP, ocupacion_beneficiario, cod_identificacion_beneficiario, numero_identificacion_beneficiario,
+                            cve_elector_beneficiario, fecha_vencimiento_id_beneficiario, fecha_ultima_transaccion
+                        ) VALUES (
+                            @IdEncabezado, @IdOrden, @Transmisor, @Corresponsal, @CveGiro, @FechaStatus, @Status,
+                            @DivisaOrigen, @ImporteOrigen, @TipoCambio, @DivisaDestino, @ImporteDestino,
+                            @OficinaDestino, @NombreRemitente, @ApellidoPaternoRemitente, @ApellidoMaternoRemitente,
+                            @PaisRemitente, @EstadoRemitente, @CiudadRemitente, @DomicilioRemitente, @CodPostalRemitente,
+                            @TelefonoRemitente, @FechaAltaBeneficiario, @CurpBeneficiario, @NombreBeneficiario,
+                            @ApellidoPaternoBeneficiario, @ApellidoMaternoBeneficiario, @Genero, @FechaNacimientoBeneficiario,
+                            @PaisNacimientoBeneficiario, @NacionalidadBeneficiario, @EmailBeneficiario, @TelefonoBeneficiario,
+                            @PaisResidenciaBeneficiario, @EstadoDomicilioBeneficiario, @MunicipioDomicilioBeneficiario,
+                            @ColoniaDomicilioBeneficiario, @CiudadDomicilioBeneficiario, @CalleDomicilioBeneficiario,
+                            @NoExtDomicilioBeneficiario, @NoIntDomicilioBeneficiario, @CpDomicilioBeneficiario,
+                            @IsPEP, @OcupacionBeneficiario, @CodIdentificacionBeneficiario, @NumeroIdentificacionBeneficiario,
+                            @CveElectorBeneficiario, @FechaVencimientoIdBeneficiario, @FechaUltimaTransaccion
+                        );";
+    
+                    transaction.Connection.Execute(sql, records, transaction);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    // Aquí podrías loggear el error si lo deseas
+                    return false;
+                }
+            }
+    
+            public int InsertHeaderRecords(HeaderRecord record, IDbTransaction transaction)
+            {
+                try
+                {
+                    var sql = @"
+                        INSERT INTO Header (
+                            datos_reporte, fecha_transmision, fecha_trabajo, nombre_archivo, fecha_insercion
+                        ) VALUES (
+                            @datos_reporte, @TipoRegistro, @fecha_trabajo, @fecha_trabajo, @fecha_insercion
+                        );";
+    
+                    transaction.Connection.Execute(sql, record, transaction);
+                    return transaction.Connection.QuerySingle<int>(sql, record, transaction);
+                }
+                catch (Exception)
+                {
+                    return 0;
+                }
+            }
+    
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\Data\RemesaEfectiva\TransactionRepository.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\FileParsers\BahuCsvFileParser.cs ---
+    using FileProcessor.Core.Interfaces;
+    using FileProcessor.Core.Models;
+    using FileProcessor.Core.Models.Bahu;
+    using Microsoft.Extensions.Logging;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Threading.Tasks;
+    using CsvHelper;
+    using CsvHelper.Configuration;
+    using System.Globalization;
+    
+    namespace FileProcessor.Infrastructure.FileParsers
+    {
+        public class BahuCsvFileParser : IFileParser
+        {
+            private readonly ILogger<BahuCsvFileParser> _logger;
+    
+            public BahuCsvFileParser(ILogger<BahuCsvFileParser> logger)
+            {
+                _logger = logger;
+            }
+    
+            public bool CanParse(string fileExtension) =>
+                fileExtension.Equals(".csv", StringComparison.OrdinalIgnoreCase);
+    
+            public async Task<FileParseResult> ParseAsync(string filePath)
+            {
+                var result = new FileParseResult();
+                result.Metadata = new FileMetadata
+                {
+                    FileName = Path.GetFileName(filePath),
+                    FileType = "CSV"
+                };
+    
+                try
+                {
+                    using (var reader = new StreamReader(filePath))
+                    using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
+                    {
+                        HeaderValidated = null,
+                        MissingFieldFound = null,
+                        Delimiter = ",",
+                    }))
+                    {
+                        csv.Read();
+                        csv.ReadHeader();
+                        string[] headers = csv.HeaderRecord;
+                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath).ToLower();
+                        string fileType = GetFileType(fileNameWithoutExtension);
+    
+                        while (csv.Read())
+                        {
+                            try
+                            {
+                                switch (fileType)
+                                {
+                                    case "accounts":
+                                        var account = ParseAccount(csv, headers);
+                                        if (account != null)
+                                        {
+                                            result.Records.Add(account);
+                                        }
+                                        break;
+                                    case "customers":
+                                        var customer = ParseCustomer(csv, headers);
+                                        if (customer != null)
+                                        {
+                                            result.Records.Add(customer);
+                                        }
+                                        break;
+                                    case "authorizations":
+                                        var authorization = ParseAuthorization(csv, headers);
+                                        if (authorization != null)
+                                        {
+                                            result.Records.Add(authorization);
+                                        }
+                                        break;
+                                    default:
+                                        _logger.LogWarning($"Unknown file type: {filePath}");
+                                        result.Success = false;
+                                        result.Message = $"Unknown file type: {filePath}";
+                                        return result;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogError(ex, $"Error parsing record in {filePath}, skipping record.");
+                                // Optionally, you could log the problematic record here.
+                            }
+                        }
+                    }
+                    result.Success = true;
+                    result.Metadata.TotalRecords = result.Records.Count;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error parsing CSV file: {FilePath}", filePath);
+                    result.Success = false;
+                    result.Message = ex.Message;
+                }
+                return result;
+            }
+    
+            private string GetFileType(string fileNameWithoutExtension)
+            {
+                // Extract file type based on the filename pattern
+                string[] parts = fileNameWithoutExtension.Split(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length > 0)
+                {
+                    return parts[0];
+                }
+                return "unknown";
+            }
+    
+            private Account ParseAccount(CsvReader csv, string[] headers)
+            {
+                try
+                {
+                    var account = new Account();
+                    for (int i = 0; i < headers.Length; i++)
+                    {
+                        string header = headers[i];
+                        switch (header)
+                        {
+                            case "product_id":
+                                account.ProductId = csv.GetField<int>(header);
+                                break;
+                            case "pocket_name":
+                                account.PocketName = csv.GetField(header);
+                                break;
+                            case "customer_id":
+                                account.CustomerId = csv.GetField<int>(header);
+                                break;
+                            case "account_id":
+                                account.AccountId = csv.GetField<int>(header);
+                                break;
+                            case "card_id":
+                                account.CardId = csv.GetField<int>(header);
+                                break;
+                            case "masked_pan":
+                                account.MaskedPan = csv.GetField(header);
+                                break;
+                            case "pan_last_four_digits":
+                                account.PanLastFourDigits = csv.GetField(header);
+                                break;
+                            case "expiration_date":
+                                account.ExpirationDate = csv.GetField<DateTime>(header);
+                                break;
+                            case "activation_date":
+                                account.ActivationDate = csv.GetField<DateTime>(header);
+                                break;
+                            case "card_status":
+                                account.CardStatus = csv.GetField(header);
+                                break;
+                            //case "card_status_change_date":
+                            //    account.CardStatusChangeDate = csv.GetField<DateTime>(header);
+                            //    break;
+                            case "card_status_change_date":
+                                var rawValue = csv.GetField(header);
+                                account.CardStatusChangeDate = rawValue == "NA" || rawValue == "TBD" ? (DateTime?)null : DateTime.Parse(rawValue);
+                                break;
+    
+                            case "physical_card_request_date":
+                                var rawValue1 = csv.GetField(header);
+                                account.PhysicalCardRequestDate = rawValue1 == "NA" || rawValue1 == "TBD" ? (DateTime?)null : DateTime.Parse(rawValue1);
+                                break;
+                            case "embossing_request_date":
+                                var rawValue2 = csv.GetField(header);
+                                account.EmbossingRequestDate = rawValue2 == "NA" || rawValue2 == "TBD" ? (DateTime?)null : DateTime.Parse(rawValue2);
+                                break;
+                            case "account_status":
+                                account.AccountStatus = csv.GetField(header);
+                                break;
+                            case "shipping_street_number":
+                                account.ShippingStreetNumber = csv.GetField(header);
+                                break;
+                            case "shipping_unit_number":
+                                account.ShippingUnitNumber = csv.GetField(header);
+                                break;
+                            case "shipping_address":
+                                account.ShippingAddress = csv.GetField(header);
+                                break;
+                            case "shipping_additional_address":
+                                account.ShippingAdditionalAddress = csv.GetField(header);
+                                break;
+                            case "shipping_city":
+                                account.ShippingCity = csv.GetField(header);
+                                break;
+                            case "shipping_zipcode":
+                                account.ShippingZipcode = csv.GetField(header);
+                                break;
+                            case "short_customer_name":
+                                account.ShortCustomerName = csv.GetField(header);
+                                break;
+                            case "ArchivoId":
+                                account.ArchivoId = csv.GetField<int>(header);
+                                break;
+                        }
+                    }
+                    return account;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error parsing Account record");
+                    return null; // Or throw an exception if you prefer
+                }
+            }
+    
+            private Customer ParseCustomer(CsvReader csv, string[] headers)
+            {
+                try
+                {
+                    var customer = new Customer();
+                    for (int i = 0; i < headers.Length; i++)
+                    {
+                        string header = headers[i];
+                        switch (header)
+                        {
+                            case "product_id":
+                                customer.ProductId = csv.GetField<int>(header);
+                                break;
+                            case "pocket_name":
+                                customer.PocketName = csv.GetField(header);
+                                break;
+                            case "name":
+                                customer.Name = csv.GetField(header);
+                                break;
+                            case "additional_name":
+                                customer.AdditionalName = csv.GetField(header);
+                                break;
+                            case "last_name":
+                                customer.LastName = csv.GetField(header);
+                                break;
+                            case "additional_last_name":
+                                customer.AdditionalLastName = csv.GetField(header);
+                                break;
+                            case "street_number":
+                                customer.StreetNumber = csv.GetField(header);
+                                break;
+                            case "unit_number":
+                                customer.UnitNumber = csv.GetField(header);
+                                break;
+                            case "address":
+                                customer.Address = csv.GetField(header);
+                                break;
+                            case "additional_address":
+                                customer.AdditionalAddress = csv.GetField(header);
+                                break;
+                            case "city":
+                                customer.City = csv.GetField(header);
+                                break;
+                            case "state":
+                                customer.State = csv.GetField(header);
+                                break;
+                            case "zipcode":
+                                customer.Zipcode = csv.GetField(header);
+                                break;
+                            case "phone_number":
+                                customer.PhoneNumber = csv.GetField(header);
+                                break;
+                            case "birthdate":
+                                customer.Birthdate = csv.GetField<DateTime>(header);
+                                break;
+                            case "birth_country_id":
+                                customer.BirthCountryId = csv.GetField<int>(header);
+                                break;
+                            case "email":
+                                customer.Email = csv.GetField(header);
+                                break;
+                            case "fiscal_id":
+                                customer.FiscalId = csv.GetField(header);
+                                break;
+                            case "occupation":
+                                customer.Occupation = csv.GetField(header);
+                                break;
+                            case "county":
+                                customer.County = csv.GetField(header);
+                                break;
+                            case "residence_place":
+                                customer.ResidencePlace = csv.GetField(header);
+                                break;
+                            case "risk_level":
+                                customer.RiskLevel = csv.GetField<int>(header);
+                                break;
+                            case "customer_id":
+                                customer.CustomerId = csv.GetField<int>(header);
+                                break;
+                            case "creation_date":
+                                customer.CreationDate = csv.GetField<DateTime>(header);
+                                break;
+                            case "account_id":
+                                customer.AccountId = csv.GetField<int>(header);
+                                break;
+                            case "status":
+                                customer.Status = csv.GetField(header);
+                                break;
+                            case "status_change_date":
+                                customer.StatusChangeDate = csv.GetField<DateTime>(header);
+                                break;
+                            case "lock_date":
+                                customer.LockDate = csv.GetField<DateTime>(header);
+                                break;
+                            case "balance":
+                                customer.Balance = csv.GetField<decimal>(header);
+                                break;
+                            case "retained_balance":
+                                customer.RetainedBalance = csv.GetField<decimal>(header);
+                                break;
+                            case "last_transaction_date":
+                                customer.LastTransactionDate = csv.GetField<DateTime>(header);
+                                break;
+                            case "ArchivoId":
+                                customer.ArchivoId = csv.GetField<int>(header);
+                                break;
+                        }
+                    }
+                    return customer;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error parsing Customer record");
+                    return null;
+                }
+            }
+    
+            private Authorization ParseAuthorization(CsvReader csv, string[] headers)
+            {
+                try
+                {
+                    var authorization = new Authorization();
+                    for (int i = 0; i < headers.Length; i++)
+                    {
+                        string header = headers[i];
+                        switch (header)
+                        {
+                            case "product_id":
+                                authorization.ProductId = csv.GetField<int>(header);
+                                break;
+                            case "pocket_name":
+                                authorization.PocketName = csv.GetField(header);
+                                break;
+                            case "customer_id":
+                                authorization.CustomerId = csv.GetField<int>(header);
+                                break;
+                            case "account_id":
+                                authorization.AccountId = csv.GetField<int>(header);
+                                break;
+                            case "create_date":
+                                authorization.CreateDate = csv.GetField<DateTime>(header);
+                                break;
+                            case "movement_id":
+                                authorization.MovementId = csv.GetField<int>(header);
+                                break;
+                            case "operation_id":
+                                authorization.OperationId = csv.GetField<int>(header);
+                                break;
+                            case "merchant_location":
+                                authorization.MerchantLocation = csv.GetField(header);
+                                break;
+                            case "country":
+                                authorization.Country = csv.GetField(header);
+                                break;
+                            case "amount":
+                                authorization.Amount = csv.GetField<decimal>(header);
+                                break;
+                            case "currency_id":
+                                authorization.CurrencyId = csv.GetField<int>(header);
+                                break;
+                            case "fee_amount":
+                                authorization.FeeAmount = csv.GetField<decimal>(header);
+                                break;
+                            case "total_amount":
+                                authorization.TotalAmount = csv.GetField<decimal>(header);
+                                break;
+                            case "iso_response_code":
+                                authorization.IsoResponseCode = csv.GetField<int>(header);
+                                break;
+                            case "authorization_number":
+                                authorization.AuthorizationNumber = csv.GetField<int>(header);
+                                break;
+                            case "movement_status":
+                                authorization.MovementStatus = csv.GetField(header);
+                                break;
+                            case "force_flag":
+                                authorization.ForceFlag = csv.GetField(header);
+                                break;
+                            case "cashback_amount":
+                                authorization.CashbackAmount = csv.GetField<decimal>(header);
+                                break;
+                            case "contactless_flag":
+                                authorization.ContactlessFlag = csv.GetField(header);
+                                break;
+                            case "present_card_flag":
+                                authorization.PresentCardFlag = csv.GetField(header);
+                                break;
+                            case "check_inout_flag":
+                                authorization.CheckInOutFlag = csv.GetField(header);
+                                break;
+                            case "merchant_id":
+                                authorization.MerchantId = csv.GetField<int>(header);
+                                break;
+                            case "merchant_category_code":
+                                authorization.MerchantCategoryCode = csv.GetField<int>(header);
+                                break;
+                            case "acquirer_bin":
+                                authorization.AcquirerBin = csv.GetField<int>(header);
+                                break;
+                            case "iso_card_acceptor_terminal_id":
+                                authorization.IsoCardAcceptorTerminalId = csv.GetField<int>(header);
+                                break;
+                            case "terminal_capabilities":
+                                authorization.TerminalCapabilities = csv.GetField<int>(header);
+                                break;
+                            case "pos_entry_mode":
+                                authorization.PosEntryMode = csv.GetField<int>(header);
+                                break;
+                            case "entry_type":
+                                authorization.EntryType = csv.GetField<int>(header);
+                                break;
+                            case "reversal_flag":
+                                authorization.ReversalFlag = csv.GetField(header);
+                                break;
+                            case "ArchivoId":
+                                authorization.ArchivoId = csv.GetField<int>(header);
+                                break;
+                        }
+                    }
+                    return authorization;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error parsing Authorization record");
+                    return null;
+                }
+            }
+        }
+    }
+    
+--- Fin del contenido de .\FileProcessor\Infrastructure\FileParsers\BahuCsvFileParser.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\FileParsers\BaseFileParser.cs ---
+    using FileProcessor.Core.Interfaces;
+    using FileProcessor.Core.Models;
+    using Microsoft.Extensions.Logging;
+    using System.Text.RegularExpressions;
+    
+    namespace FileProcessor.Infrastructure.FileParsers
+    {
+        public abstract class BaseFileParser : IFileParser
+        {
+            protected readonly ILogger<BaseFileParser> _logger;
+    
+            protected BaseFileParser(ILogger<BaseFileParser> logger)
+            {
+                _logger = logger;
+            }
+    
+            public abstract bool CanParse(string fileExtension);
+            public abstract Task<FileParseResult> ParseAsync(string filePath);
+    
+            protected bool IsProsaFile(string fileName)
+            {
+                string pattern = @"^I\d{4}\.B\d{4}EMI(\.TXT)?$";
+                return Regex.IsMatch(fileName, pattern, RegexOptions.IgnoreCase);
+            }
+    
+    
+            protected async Task<string[]> ReadFileLinesAsync(string filePath)
+            {
+                return await File.ReadAllLinesAsync(filePath);
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\FileParsers\BaseFileParser.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\FileParsers\CsvFileParser.cs ---
+    using FileProcessor.Core.Interfaces;
+    using FileProcessor.Core.Models;
+    using FileProcessor.Core.Services;
+    using FileProcessor.Infrastructure.FileParsers;
+    using Microsoft.Extensions.Logging;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using FileProcessor.Core.Interfaces.RemesaEfectiva;
+    using Azure;
+    using Microsoft.Extensions.Configuration;
+    
+    namespace FileProcessor.Infrastructure.FileParsers
+    {
+        public class CsvFileParser : IFileParser
+        {
+            private readonly IConfiguration _configuration;
+            private readonly ILogger<CsvFileParser> _logger;
+            private readonly ILogger<RemesaEfectivaCsvFileParser> _remesaEfectivaLogger;
+            private readonly RemesaEfectivaService _remesaEfectivaService;
+    
+    
+            public CsvFileParser(ILogger<CsvFileParser> logger)
+            {
+                _logger = logger;
+            }
+    
+            public bool CanParse(string fileExtension) =>
+                fileExtension.Equals(".txt", StringComparison.OrdinalIgnoreCase);
+    
+            public async Task<FileParseResult> ParseAsync(string filePath)
+            {
+                var result = new FileParseResult();
+                try
+                {
+                    var lines = await File.ReadAllLinesAsync(filePath);
+                    switch (filePath.ToUpper())
+                    {
+                        case string a when a.Contains("REMEFE_".ToUpper()):
+                            var remesaEfectivaCsvFileParser = new RemesaEfectivaCsvFileParser(_configuration, _remesaEfectivaLogger, _remesaEfectivaService);
+                            var parseResult = await remesaEfectivaCsvFileParser.ParseAsync(filePath);
+    
+                            if (!parseResult.Success)
+                            {
+                                _logger.LogWarning($"ProsaTextFileParser falló en procesar el archivo: {filePath}. Error: {parseResult.ErrorMessage}");
+                                result.Success = false;
+                                result.Message = parseResult.ErrorMessage;
+                                return result;
+                            }
+                            break;
+                            //case string b when b.Contains("fw_AuthorizedTransactions".ToUpper()):
+                            //    procesarFW(finfo, "ust_fw_AuthorizedTransactions");
+                            //    break;
+                            //case string c when c.Contains("fw_CustomerMaster".ToUpper()):
+                            //    procesarFW(finfo, "ust_fw_CustomerMaster");
+                            //    break;
+                            //case string d when d.Contains("fw_Lookup".ToUpper()):
+                            //    procesarFW(finfo, "ust_fw_Lookup");
+                            //    break;
+                            //case string e when e.Contains("fw_".ToUpper()):
+                            //    procesarVisaFW(finfo, "GALILEO_FW");
+                            //    break;
+                            //case string f when f.Contains("leap".ToUpper()):
+    
+                            //    procesarLeap(finfo);
+                            //    break;
+                            //case string g when g.Contains("sbv_".ToUpper()):
+    
+                            //    procesarVisaFW(finfo, "GALILEO_VISA");
+                            //    break;
+                    }
+    
+                    result.Metadata = new FileMetadata
+                    {
+                        FileName = Path.GetFileName(filePath),
+                        FileType = "CSV",
+                        TotalRecords = lines.Length
+                    };
+                    result.Success = true;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error parsing csv file");
+                    result.Success = false;
+                    result.Message = ex.Message;
+                }
+                return result;
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\FileParsers\CsvFileParser.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\FileParsers\ExcelFileParser.cs ---
+    using FileProcessor.Core.Interfaces;
+    using FileProcessor.Core.Models;
+    using Microsoft.Extensions.Logging;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Infrastructure.FileParsers
+    {
+        
+        public class ExcelFileParser : IFileParser
+        {
+            private readonly ILogger<ExcelFileParser> _logger;
+    
+            public ExcelFileParser(ILogger<ExcelFileParser> logger)
+            {
+                _logger = logger;
+            }
+    
+            public bool CanParse(string fileExtension) =>
+                fileExtension.Equals(".txt", StringComparison.OrdinalIgnoreCase);
+    
+            public async Task<FileParseResult> ParseAsync(string filePath)
+            {
+                var result = new FileParseResult();
+                try
+                {
+                    var lines = await File.ReadAllLinesAsync(filePath);
+                    // Implementación específica del parsing...
+    
+                    result.Metadata = new FileMetadata
+                    {
+                        FileName = Path.GetFileName(filePath),
+                        FileType = "XLS",
+                        TotalRecords = lines.Length
+                    };
+                    result.Success = true;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error parsing XLS file");
+                    result.Success = false;
+                    result.Message = ex.Message;
+                }
+                return result;
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\FileParsers\ExcelFileParser.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\FileParsers\FileParserFactory.cs ---
+    using FileProcessor.Core.Interfaces;
+    using Microsoft.Extensions.Logging;
+    
+    namespace FileProcessor.Infrastructure.FileParsers
+    {
+        public class FileParserFactory
+        {
+            private readonly IEnumerable<IFileParser> _parsers;
+            private readonly ILogger<FileParserFactory> _logger;
+    
+            public FileParserFactory(
+                IEnumerable<IFileParser> parsers,
+                ILogger<FileParserFactory> logger)
+            {
+                _parsers = parsers;
+                _logger = logger;
+            }
+    
+            public IFileParser GetParser(string filePath)
+            {
+                var extension = Path.GetExtension(filePath);
+                var parser = _parsers.FirstOrDefault(p => p.CanParse(extension));
+    
+                if (parser == null)
+                    throw new NotSupportedException($"File type {extension} is not supported");
+    
+                return parser;
+            }
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\FileParsers\FileParserFactory.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\FileParsers\ProsaTextFileParser.cs ---
+    using FileProcessor.Core.Interfaces;
+    using Microsoft.Data.SqlClient;
+    using Dapper;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Collections.Generic;
+    using System.Data;
+    using Microsoft.Extensions.Logging;
+    using FileProcessor.Core.Models;
+    using FileProcessor.Core.Models.Prosa;
+    using Microsoft.Extensions.Configuration;
+    using System.Globalization;
+    using FileProcessor.Infrastructure.Data.Prosa;
+    using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+    using FileProcessor.Core.Services;
+    
+    namespace FileProcessor.Infrastructure.FileParsers
+    {
+        public class ProsaTextFileParser : BaseFileParser, IFileProcessor
+        {
+            private readonly ILogger<ProsaTextFileParser> _logger;
+            private readonly ProsaPosteoService _prosaPosteoService;
+            private readonly IConfiguration _configuration;
+    
+            public ProsaTextFileParser(
+                IConfiguration configuration,
+                ILogger<ProsaTextFileParser> logger,
+                ProsaPosteoService prosaPosteoService)
+                : base(logger) // Asegúrate que BaseFileParser recibe el logger
+            {
+                _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+                _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+                _prosaPosteoService = prosaPosteoService ?? throw new ArgumentNullException(nameof(prosaPosteoService));
+            }
+    
+    
+    
+            public async Task<FileParseResult> ProcessFileAsync(string filePath)
+            {
+                try
+                {
+                    // Validar si el archivo ya fue procesado
+                    bool alreadyProcessed = await _prosaPosteoService.IsFileAlreadyProcessed(
+                        Path.GetFileName(filePath));
+    
+                    if (alreadyProcessed)
+                    {
+                        return new FileParseResult
+                        {
+                            Success = false,
+                            ErrorMessage = "El archivo ya ha sido procesado anteriormente"
+                        };
+                    }
+    
+                    // Leer y procesar el archivo
+                    string[] lines = await ReadFileLinesAsync(filePath);
+    
+                    int totalRecords = lines.Length - 2; // Restar HEADER y TRAILER
+                    int loadedRecords = 0;
+    
+                    // Procesar HEADER (primera línea)
+                    var header = ParseHeaderLine(lines[0]);
+    
+                    //// Registrar archivo
+                    //int archivoId = await RegisterFileProcessing(
+                    //    Path.GetFileName(filePath),
+                    //    totalRecords);
+                    ArchivosProcesadosRecord archivosProcesadosRecord = new ArchivosProcesadosRecord()
+                    {
+                         NombreArchivo = Path.GetFileName(filePath),
+                         TotalRegistros = totalRecords,
+                         FechaProcesamiento = DateTime.Now,
+    
+                    };
+                    DetailRecord detalle = new DetailRecord();
+                    List<DetailRecord> detailRecords = new List<DetailRecord>();
+                    DetailEMVRecord emvDetail = new DetailEMVRecord();
+                    List<DetailEMVRecord> detalleEMVRecords = new List<DetailEMVRecord>();
+    
+                    // Procesar líneas de detalle
+                    for (int i = 1; i < lines.Length - 1; i++)
+                    {
+                        if ((lines[i].Substring(24, 1).Trim() == "D" || lines[i].Substring(24, 1).Trim() == "C"))
+                        {
+                            //Es Detalle
+                            detalle = ParseDetailLine(lines[i]);
+                            detailRecords.Add(detalle);
+                        }
+                        else if( detalle.NumeroAutorizacion == lines[i].Substring(0, 6))
+                        {
+                            //Es EMVLine
+                            emvDetail = ParseEMVLine(lines[i]);
+                            detalleEMVRecords.Add(emvDetail);
+                        }
+                        loadedRecords++;
+                        
+                    }
+                    archivosProcesadosRecord.RegistrosCargados = loadedRecords;
+    
+                    // Procesar TRAILER (última línea)
+                    var trailer = ParseTrailerLine(lines[lines.Length - 1]);
+                    
+                    
+    
+                    //prosaPosteoService.InsertAllRecordsTransactional(archivosProcesadosRecord, header, detailRecords, detalleEMVRecords, trailer);
+                    _prosaPosteoService.InsertAllRecordsTransactional(archivosProcesadosRecord, header, detailRecords, detalleEMVRecords, trailer);
+    
+    
+                    return new FileParseResult
+                    {
+                        Success = true,
+                        //TotalRecords = totalRecords,
+                        //LoadedRecords = loadedRecords
+                    };
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Error al procesar el archivo {filePath}");
+                    return new FileParseResult
+                    {
+                        Success = false,
+                        ErrorMessage = ex.Message
+                    };
+                }
+            }
+            public override bool CanParse(string fileExtension) =>
+        fileExtension.Equals(".txt", StringComparison.OrdinalIgnoreCase);
+            public override async Task<FileParseResult> ParseAsync(string filePath)
+            {
+                return await ProcessFileAsync(filePath);
+            }
+            public async Task<bool> IsFileAlreadyProcessed(string fileName)
+            {
+                return await _prosaPosteoService.IsFileAlreadyProcessed(fileName);
+            }
+    
+            private HeaderRecord ParseHeaderLine(string line)
+            {
+                if (line.Length < 210) throw new FormatException("La línea HEADER es demasiado corta");
+    
+                return new HeaderRecord
+                {
+                    TipoRegistro = line.Substring(0, 10).Trim(),
+                    InstitucionGenera = line.Substring(11, 20).Trim(),
+                    InstitucionRecibe = line.Substring(32, 20).Trim(),
+                    LeyendaFijaFecha = line.Substring(53, 18).Trim(),
+                    FechaProceso = line.Substring(72, 6),
+                    NumeroConsecutivo = line.Substring(92, 6),
+                    CaracteristicasArchivo = line.Substring(113, 10).Trim()
+                };
+            }
+                   
+            private static DetailRecord ParseDetailLine(string line)
+            {
+                if (line.Length < 510) line = line.PadRight(510);
+    
+                var record = new DetailRecord
+                {
+                    BancoEmisor = line.Substring(0, 5).Trim(),
+                    NumeroCuenta = line.Substring(5, 19).Trim(),
+                    NaturalezaContable = line.Substring(24, 1).Trim(),
+                    MarcaProducto = line.Substring(25, 1).Trim(),
+                    FechaConsumo = line.Substring(28, 6).Trim(),
+                    HoraConsumo = line.Substring(34, 6).Trim(),
+                    FechaProceso = line.Substring(40, 6).Trim(),
+                    TipoTransaccion = line.Substring(46, 2).Trim(),
+                    NumeroLiquidacion = line.Substring(48, 2).Trim(),
+                    ImporteOrigenTotal = ParseDecimal(line.Substring(50, 13), 11, 2),
+                    ImporteOrigenConsumo = ParseDecimal(line.Substring(63, 13), 11, 2),
+                    ClaveMonedaOrigen = line.Substring(76, 3).Trim(),
+                    ImporteDestinoTotal = ParseDecimal(line.Substring(79, 13), 11, 2),
+                    ImporteDestinoConsumo = ParseDecimal(line.Substring(92, 13), 11, 2),
+                    ClaveMonedaDestino = line.Substring(105, 3).Trim(),
+                    ParidadDestino = ParseDecimal(line.Substring(108, 7), 3, 4),
+                    ImporteLiquidacionTotal = ParseDecimal(line.Substring(115, 13), 11, 2),
+                    ImporteLiquidacionConsumo = ParseDecimal(line.Substring(128, 13), 11, 2),
+                    ClaveMonedaLiquidacion = line.Substring(141, 3).Trim(),
+                    ParidadLiquidacion = ParseDecimal(line.Substring(144, 7), 3, 4),
+                    ClaveComercio = line.Substring(242, 15).Trim(),
+                    MCCGiroComercio = line.Substring(257, 5).Trim(),
+                    NombreComercio = line.Substring(262, 30).Trim(),
+                    DireccionComercio = line.Substring(292, 40).Trim(),
+                    PaisOrigenTx = line.Substring(332, 3).Trim(),
+                    CodigoPostal = line.Substring(335, 10).Trim(),
+                    PoblacionComercio = line.Substring(345, 13).Trim(),
+                    PorcentajeCuotaIntercambio = ParseDecimal(line.Substring(358, 5)),
+                    FamiliaComercio = line.Substring(363, 2).Trim(),
+                    RFCComercio = line.Substring(365, 13).Trim(),
+                    EstatusComercio = line.Substring(378, 2).Trim(),
+                    NumeroFuente = line.Substring(380, 5).Trim(),
+                    NumeroAutorizacion = line.Substring(385, 6).Trim(),
+                    BancoReceptor = line.Substring(391, 5).Trim(),
+                    ReferenciaTransaccion = line.Substring(396, 23).Trim(),
+                    ModoAutorizacion = line.Substring(419, 1).Trim(),
+                    IndicadorMedioAcceso = line.Substring(420, 2).Trim(),
+                    Diferimiento = line.Substring(422, 2).Trim(),
+                    Parcializacion = line.Substring(424, 2).Trim(),
+                    TipoPlan = line.Substring(426, 2).Trim(),
+                    IndicadorCobroAutomatico = line.Substring(448, 1).Trim(),
+                    FIIDEmisor = line.Substring(449, 4).Trim(),
+                    IndicadorDatosCompletosTrack2 = line.Substring(464, 1).Trim(),
+                    IndicadorComercioElectronico = line.Substring(465, 1).Trim(),
+                    IndicadorColectorAutenticacion = line.Substring(466, 1).Trim(),
+                    CapacidadTerminal = line.Substring(467, 1).Trim(),
+                    IndicadorTerminalActiva = line.Substring(468, 1).Trim(),
+                    TerminalID = line.Substring(469, 10).Trim(),
+                    ModoEntradaPos = line.Substring(479, 2).Trim(),
+                    IndicadorCV2 = line.Substring(481, 1).Trim(),
+                    IndicadorCAVVUCAFAAV = line.Substring(482, 1).Trim(),
+                    FIIDAdquirente = line.Substring(483, 4).Trim(),
+                    IndicadorPagoInterbancario = line.Substring(487, 1).Trim(),
+                    IndicadorPresenciaTH = line.Substring(489, 1).Trim(),
+                    IndicadorPresenciaTarjeta = line.Substring(490, 1).Trim(),
+                    MetodoDeIdentificacionTH = line.Substring(491, 1).Trim()
+                };
+    
+                // Parse optional fields if they contain non-space/non-zero values
+                if (line.Substring(151, 17).Trim().Length > 0)
+                    record.ImporteCuotaIntercambio = ParseDecimal(line.Substring(151, 17), 11, 6);
+    
+                if (line.Substring(168, 17).Trim().Length > 0)
+                    record.IvaCuotaIntercambio = ParseDecimal(line.Substring(168, 17), 11, 6);
+    
+                if (line.Substring(185, 13).Trim().Length > 0)
+                    record.ImporteAplicacionTH = ParseDecimal(line.Substring(185, 13), 11, 2);
+    
+                if (line.Substring(198, 13).Trim().Length > 0)
+                    record.ImporteConsumoAplicacionTH = ParseDecimal(line.Substring(198, 13), 11, 2);
+    
+                if (line.Substring(211, 5).Trim().Length > 0)
+                    record.PorcentajeComisionAplicacionTH = ParseDecimal(line.Substring(211, 5), 3, 2);
+    
+                if (line.Substring(428, 8).Trim().Length > 0)
+                    record.Sobretasa = ParseDecimal(line.Substring(428, 8), 6, 2);
+    
+                if (line.Substring(436, 7).Trim().Length > 0)
+                    record.IvaSobretasa = ParseDecimal(line.Substring(436, 7), 5, 2);
+    
+                if (line.Substring(443, 5).Trim().Length > 0)
+                    record.PorcentajeSobretasa = ParseDecimal(line.Substring(443, 5), 3, 2);
+    
+                return record;
+            }
+    
+            private static decimal ParseDecimal(string value, int integerPlaces = 0, int decimalPlaces = 0)
+            {
+                if (string.IsNullOrWhiteSpace(value)) return 0m;
+    
+                // Handle numeric fields with implied decimal
+                if (integerPlaces > 0 || decimalPlaces > 0)
+                {
+                    value = value.PadLeft(integerPlaces + decimalPlaces, '0');
+                    if (decimalPlaces > 0)
+                    {
+                        value = value.Insert(value.Length - decimalPlaces, CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
+                    }
+                }
+    
+                if (decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var result))
+                {
+                    return result;
+                }
+    
+                return 0m;
+            }
+            private DetailEMVRecord ParseEMVLine(string line)
+            {
+                if (line.Length < 250) throw new FormatException("La línea EMV es demasiado corta");
+    
+                return new DetailEMVRecord
+                {
+                    // Campo 1: Número de autorización (posiciones 1-6, longitud 6)
+                    NumeroAutorizacion = line.Substring(0, 6), // Se corrige a 0-based index
+    
+                    // Campo 2: Número de cuenta (posiciones 7-25, longitud 19)
+                    NumeroCuenta = line.Substring(6, 19).Trim(),
+    
+                    // Campo 3: Tipo de registro (posiciones 26-27, longitud 2)
+                    TipoRegistro = line.Substring(25, 2),
+    
+                    // Campo 4: Application Cryptogram (posiciones 28-43, longitud 16)
+                    ApplicationCryptogram = line.Substring(27, 16),
+    
+                    // Campo 5: Cryptogram Information Data (posiciones 44-45, longitud 2)
+                    CryptogramInformationData = line.Substring(43, 2),
+    
+                    // Campo 6: Issuer Application Data (posiciones 46-109, longitud 64)
+                    IssuerApplicationData = line.Length > 45 ? line.Substring(45, 64) : string.Empty,
+    
+                    // Campo 7: Unpredictable Number (posiciones 110-117, longitud 8)
+                    UnpredictableNumber = line.Length > 109 ? line.Substring(109, 8) : string.Empty,
+    
+                    // Campo 8: Application Transaction Counter (posiciones 118-121, longitud 4)
+                    ApplicationTransactionCounter = line.Length > 117 ? line.Substring(117, 4) : string.Empty,
+    
+                    // Campo 9: Terminal Verification Result (posiciones 122-131, longitud 10)
+                    TerminalVerificationResult = line.Length > 121 ? line.Substring(121, 10) : string.Empty,
+    
+                    // Campo 10: Transaction Date (posiciones 132-137, longitud 6)
+                    TransactionDate = line.Length > 131 ? line.Substring(131, 6) : string.Empty,
+    
+                    // Campo 11: Transaction Type (posiciones 138-139, longitud 2)
+                    TransactionType = line.Length > 137 ? line.Substring(137, 2) : string.Empty,
+    
+                    // Campo 12: Amount Authorized (posiciones 140-151, longitud 12)
+                    AmountAuthorized = line.Length > 139 ? line.Substring(139, 12) : string.Empty,
+    
+                    // Campo 13: Transaction Currency Code (posiciones 152-155, longitud 4)
+                    TransactionCurrencyCode = line.Length > 151 ? line.Substring(151, 4) : string.Empty,
+    
+                    // Campo 14: Application Interchange Profile (posiciones 156-159, longitud 4)
+                    ApplicationInterchangeProfile = line.Length > 155 ? line.Substring(155, 4) : string.Empty,
+    
+                    // Campo 15: Terminal Country Code (posiciones 160-163, longitud 4)
+                    TerminalCountryCode = line.Length > 159 ? line.Substring(159, 4) : string.Empty,
+    
+                    // Campo 16: Amount Other (posiciones 164-175, longitud 12)
+                    AmountOther = line.Length > 163 ? line.Substring(163, 12) : string.Empty,
+    
+                    // Campo 17: Cardholder Verification Method (posiciones 176-181, longitud 6)
+                    CardholderVerificationMethod = line.Length > 175 ? line.Substring(175, 6) : string.Empty,
+    
+                    // Campo 18: Terminal Capabilities (posiciones 182-189, longitud 8)
+                    TerminalCapabilities = line.Length > 181 ? line.Substring(181, 8) : string.Empty,
+    
+                    // Campo 19: Terminal Type (posiciones 190-191, longitud 2)
+                    TerminalType = line.Length > 189 ? line.Substring(189, 2) : string.Empty,
+    
+                    // Campo 20: Interface Device Serial Number (posiciones 192-199, longitud 8)
+                    InterfaceDeviceSerialNumber = line.Length > 191 ? line.Substring(191, 8) : string.Empty,
+    
+                    // Campo 21: Dedicated File Name (posiciones 200-231, longitud 32)
+                    DedicatedFileName = line.Length > 199 ? line.Substring(199, 32) : string.Empty,
+    
+                    // Campo 22: Terminal Application Version Number (posiciones 232-235, longitud 4)
+                    TerminalApplicationVersionNumber = line.Length > 231 ? line.Substring(231, 4) : string.Empty,
+    
+                    // Campo 23: Issuer Authentication Data (posiciones 236-267, longitud 32)
+                    IssuerAuthenticationData = line.Length > 235 ? line.Substring(235, 32) : string.Empty
+                };
+            }
+            //private DetailEMVRecord ParseEMVLine(string line)
+            //{
+            //    if (line.Length < 250) throw new FormatException("La línea EMV es demasiado corta");
+    
+            //    return new DetailEMVRecord
+            //    {
+            //        NumeroAutorizacion = line.Substring(1, 6),
+            //        NumeroCuenta = line.Substring(7, 19).Trim(),
+            //        TipoRegistro = line.Substring(26, 2),
+            //        ApplicationCryptogram = line.Substring(28, 16),
+            //        CryptogramInformationData = line.Substring(44, 2),
+            //        IssuerApplicationData = line.Length > 46 ? line.Substring(46, 64) : string.Empty,
+            //        UnpredictableNumber = line.Length > 110 ? line.Substring(110, 8) : string.Empty,
+            //        ApplicationTransactionCounter = line.Length > 118 ? line.Substring(118, 4) : string.Empty,
+            //        TerminalVerificationResult = line.Length > 122 ? line.Substring(122, 10) : string.Empty,
+            //        TransactionDate = line.Length > 132 ? line.Substring(132, 6) : string.Empty,
+            //        TransactionType = line.Length > 138 ? line.Substring(138, 2) : string.Empty,
+            //        AmountAuthorized = line.Length > 140 ? line.Substring(140, 12) : string.Empty,
+            //        TransactionCurrencyCode = line.Length > 152 ? line.Substring(152, 4) : string.Empty,
+            //        ApplicationInterchangeProfile = line.Length > 156 ? line.Substring(156, 4) : string.Empty,
+            //        TerminalCountryCode = line.Length > 160 ? line.Substring(160, 4) : string.Empty,
+            //        AmountOther = line.Length > 164 ? line.Substring(164, 12) : string.Empty,
+            //        CardholderVerificationMethod = line.Length > 176 ? line.Substring(176, 6) : string.Empty,
+            //        TerminalCapabilities = line.Length > 182 ? line.Substring(182, 8) : string.Empty,
+            //        TerminalType = line.Length > 190 ? line.Substring(190, 2) : string.Empty,
+            //        InterfaceDeviceSerialNumber = line.Length > 192 ? line.Substring(192, 8) : string.Empty,
+            //        DedicatedFileName = line.Length > 200 ? line.Substring(200, 32) : string.Empty,
+            //        TerminalApplicationVersionNumber = line.Length > 232 ? line.Substring(232, 4) : string.Empty,
+            //        IssuerAuthenticationData = line.Length > 236 ? line.Substring(236, 32) : string.Empty
+            //    };
+            //}
+    
+            private TrailerRecord ParseTrailerLine(string line)
+            {
+                if (line.Length < 216) throw new FormatException("La línea TRAILER es demasiado corta");
+    
+                return new TrailerRecord
+                {
+                    TipoRegistro = line.Substring(0, 7),
+                    TotalTransacciones = ParseIntField(line, 8, 8),
+                    TotalVentas = ParseIntField(line, 17, 6),
+                    ImporteVentas = ParseDecimalField(line, 24, 15),
+                    TotalDisposiciones = ParseIntField(line, 40, 6),
+                    ImporteDisposiciones = ParseDecimalField(line, 47, 15),
+                    TotalDebitos = ParseIntField(line, 63, 6),
+                    ImporteDebitos = ParseDecimalField(line, 70, 15),
+                    TotalPagosInterbancarios = ParseIntField(line, 86, 6),
+                    ImportePagosInterbancarios = ParseDecimalField(line, 93, 15),
+                    TotalDevoluciones = ParseIntField(line, 109, 6),
+                    ImporteDevoluciones = ParseDecimalField(line, 116, 15),
+                    TotalCreditos = ParseIntField(line, 132, 6),
+                    ImporteCreditos = ParseDecimalField(line, 139, 15),
+                    TotalRepresentaciones = ParseIntField(line, 155, 6),
+                    ImporteRepresentaciones = ParseDecimalField(line, 162, 15),
+                    TotalContracargos = ParseIntField(line, 178, 6),
+                    ImporteContracargos = ParseDecimalField(line, 185, 15),
+                    TotalComisiones = ParseDecimalField(line, 201, 15)
+                };
+            }
+    
+            private int ParseIntField(string line, int start, int length)
+            {
+                var field = line.Substring(start, length).Replace(" ", "");
+    
+                if (string.IsNullOrWhiteSpace(field) || field.All(c => c == '0'))
+                {
+                    return 0;
+                }
+    
+                // Intenta parsear como decimal primero (por si acaso)
+                if (decimal.TryParse(field, NumberStyles.Any, CultureInfo.InvariantCulture, out var decimalValue))
+                {
+                    return (int)decimalValue;
+                }
+    
+                _logger.LogWarning($"No se pudo parsear el campo entero: '{field}'");
+                return 0;
+            }
+    
+            private decimal ParseDecimalField(string line, int start, int length)
+            {
+                var field = line.Substring(start, length).Replace(" ", ""); // Elimina todos los espacios
+    
+                if (string.IsNullOrWhiteSpace(field) || field.All(c => c == '0'))
+                {
+                    return 0m;
+                }
+    
+                if (decimal.TryParse(field, NumberStyles.Any, CultureInfo.InvariantCulture, out var result))
+                {
+                    return result / 100;
+                }
+    
+                _logger.LogWarning($"No se pudo parsear el campo decimal: '{field}'");
+                return 0m;
+            }
+            //private TrailerRecord ParseTrailerLine(string line)
+            //{
+            //    if (line.Length < 200) throw new FormatException("La línea TRAILER es demasiado corta");
+    
+            //    return new TrailerRecord
+            //    {
+            //        TipoRegistro = line.Substring(0, 7),
+            //        TotalTransacciones = int.Parse(line.Substring(8, 8)),
+            //        TotalVentas = int.Parse(line.Substring(17, 6)),
+            //        ImporteVentas = decimal.Parse(line.Substring(24, 15)) / 100,
+            //        TotalDisposiciones = int.Parse(line.Substring(40, 6)),
+            //        ImporteDisposiciones = decimal.Parse(line.Substring(47, 15)) / 100,
+            //        TotalDebitos = int.Parse(line.Substring(63, 6)),
+            //        ImporteDebitos = decimal.Parse(line.Substring(70, 15)) / 100,
+            //        TotalPagosInterbancarios = int.Parse(line.Substring(86, 6)),
+            //        ImportePagosInterbancarios = decimal.Parse(line.Substring(93, 15)) / 100,
+            //        TotalDevoluciones = int.Parse(line.Substring(109, 6)),
+            //        ImporteDevoluciones = decimal.Parse(line.Substring(116, 15)) / 100,
+            //        TotalCreditos = int.Parse(line.Substring(132, 6)),
+            //        ImporteCreditos = decimal.Parse(line.Substring(139, 15)) / 100,
+            //        TotalRepresentaciones = int.Parse(line.Substring(155, 6)),
+            //        ImporteRepresentaciones = decimal.Parse(line.Substring(162, 15)) / 100,
+            //        TotalContracargos = int.Parse(line.Substring(178, 6)),
+            //        ImporteContracargos = decimal.Parse(line.Substring(185, 15)) / 100,
+            //        TotalComisiones = decimal.Parse(line.Substring(201, 15)) / 100
+            //    };
+            //}
+        }
+    
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\FileParsers\ProsaTextFileParser.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\FileParsers\RemesaEfectivaCsvFileParser.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using CsvHelper.Configuration;
+    using CsvHelper;
+    using FileProcessor.Core.Interfaces;
+    using FileProcessor.Core.Models.RemesaEfectiva;
+    using FileProcessor.Core.Models;
+    using Microsoft.Extensions.Logging;
+    using FileProcessor.Core.Models.Bahu;
+    using FileProcessor.Core.Services;
+    using Microsoft.Extensions.Configuration;
+    using System.ComponentModel.DataAnnotations;
+    
+    namespace FileProcessor.Infrastructure.FileParsers
+    {
+        public class RemesaEfectivaCsvFileParser : BaseFileParser, IFileProcessor
+        {
+            private readonly ILogger<RemesaEfectivaCsvFileParser> _logger;
+            private readonly RemesaEfectivaService _remesaEfectiaService;
+            private readonly IConfiguration _configuration;
+    
+    
+            public RemesaEfectivaCsvFileParser(
+                IConfiguration configuration,
+                ILogger<RemesaEfectivaCsvFileParser> logger,
+                RemesaEfectivaService remesaEfactivaService)
+                : base(logger) // Asegúrate que BaseFileParser recibe el logger
+            {
+                _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+                _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+                _remesaEfectiaService = remesaEfactivaService ?? throw new ArgumentNullException(nameof(remesaEfactivaService));
+    
+            }
+    
+            public async Task<FileParseResult> ProcessFileAsync(string filePath)
+            {
+                // Validar si el archivo ya fue procesado
+                    bool alreadyProcessed = await _remesaEfectiaService.IsFileAlreadyProcessed(
+                        Path.GetFileName(filePath));
+    
+                if (alreadyProcessed)
+                {
+                    return new FileParseResult
+                    {
+                        Success = false,
+                        ErrorMessage = "El archivo ya ha sido procesado anteriormente"
+                    };
+                }
+    
+                var result = new FileParseResult();
+                result.Metadata = new FileMetadata
+                {
+                    FileName = Path.GetFileName(filePath),
+                    FileType = "CSV"
+                };
+    
+                try
+                {
+                    using (var reader = new StreamReader(filePath))
+                    using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
+                    {
+                        HeaderValidated = null,
+                        MissingFieldFound = null,
+                        Delimiter = ",",
+                    }))
+                    {
+                        csv.Read();
+                        csv.ReadHeader();
+    
+                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath).ToLower();
+                        string fileType = GetFileType(fileNameWithoutExtension);
+    
+                        string[] headers = new string[]
+                        {
+                         "TRANSACCIONES",
+                         GetFechaTransmisionFromFileName(fileNameWithoutExtension),
+                         GetFechaTrabajoFromFileName(fileNameWithoutExtension),
+                         Path.GetFileName(filePath),
+                         DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
+                        };
+    
+                        int idOrden = 0;
+                        while (csv.Read())
+                        {
+                            try
+                            {
+                                var transacction = ParseTransaction(csv, idOrden);
+                                if (transacction != null)
+                                {
+                                    result.Records.Add(transacction);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogError(ex, $"Error parsing record in {filePath}, skipping record.");
+                                // Optionally, you could log the problematic record here.
+                            }
+                            idOrden++;
+                        }
+                    }
+                    result.Success = true;
+                    result.Metadata.TotalRecords = result.Records.Count;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error parsing CSV file: {FilePath}", filePath);
+                    result.Success = false;
+                    result.Message = ex.Message;
+                }
+                return result;
+            }
+            public override bool CanParse(string fileExtension) =>
+                fileExtension.Equals(".csv", StringComparison.OrdinalIgnoreCase);
+            public override async Task<FileParseResult> ParseAsync(string filePath)
+            {
+                return await ProcessFileAsync(filePath);
+            }
+            public async Task<bool> IsFileAlreadyProcessed(string fileName)        {
+                return await _remesaEfectiaService.IsFileAlreadyProcessed(fileName);
+            }
+    
+            private TransactionRecord ParseTransaction(CsvReader csv, int idOrden)
+            {
+                try
+                {
+                    var transaction = new TransactionRecord();
+    
+                    transaction.IdOrden = idOrden;
+                    transaction.Transmisor = csv.GetField(0);
+                    transaction.Corresponsal = csv.GetField(1);
+                    transaction.CveGiro = csv.GetField(2);
+                    transaction.FechaStatus = csv.GetField<DateTime>(3);
+                    transaction.Status = csv.GetField(4);
+                    transaction.DivisaOrigen = csv.GetField(5);
+                    transaction.ImporteOrigen = csv.GetField<decimal>(6);
+                    transaction.TipoCambio = csv.GetField<decimal>(7);
+                    transaction.DivisaDestino = csv.GetField(8);
+                    transaction.ImporteDestino = csv.GetField<decimal>(9);
+                    transaction.OficinaDestino = csv.GetField(10);
+                    transaction.NombreRemitente = csv.GetField(11);
+                    transaction.ApellidoPaternoRemitente = csv.GetField(12);
+                    transaction.ApellidoMaternoRemitente = csv.GetField(13);
+                    transaction.PaisRemitente = csv.GetField(14);
+                    transaction.EstadoRemitente = csv.GetField(15);
+                    transaction.CiudadRemitente = csv.GetField(16);
+                    transaction.DomicilioRemitente = csv.GetField(17);
+                    transaction.CodPostalRemitente = csv.GetField(18);
+                    transaction.TelefonoRemitente = csv.GetField(19);
+                    transaction.FechaAltaBeneficiario = csv.GetField<DateTime>(20);
+                    transaction.CurpBeneficiario = csv.GetField(21);
+                    transaction.NombreBeneficiario = csv.GetField(22);
+                    transaction.ApellidoPaternoBeneficiario = csv.GetField(23);
+                    transaction.ApellidoMaternoBeneficiario = csv.GetField(24);
+                    transaction.Genero = csv.GetField(25);
+                    transaction.FechaNacimientoBeneficiario = csv.GetField<DateTime>(26);
+                    transaction.PaisNacimientoBeneficiario = csv.GetField(27);
+                    transaction.NacionalidadBeneficiario = csv.GetField(28);
+                    transaction.EmailBeneficiario = csv.GetField(29);
+                    transaction.TelefonoBeneficiario = csv.GetField(30);
+                    transaction.PaisResidenciaBeneficiario = csv.GetField(31);
+                    transaction.EstadoDomicilioBeneficiario = csv.GetField(32);
+                    transaction.MunicipioDomicilioBeneficiario = csv.GetField(33);
+                    transaction.ColoniaDomicilioBeneficiario = csv.GetField(34);
+                    transaction.CiudadDomicilioBeneficiario = csv.GetField(35);
+                    transaction.CalleDomicilioBeneficiario = csv.GetField(36);
+                    transaction.NoExtDomicilioBeneficiario = csv.GetField(37);
+                    transaction.NoIntDomicilioBeneficiario = csv.GetField(38);
+                    transaction.CpDomicilioBeneficiario = csv.GetField(39);
+                    transaction.IsPEP = csv.GetField(40);
+                    transaction.OcupacionBeneficiario = csv.GetField(41);
+                    transaction.CodIdentificacionBeneficiario = csv.GetField(42);
+                    transaction.NumeroIdentificacionBeneficiario = csv.GetField(43);
+                    transaction.CveElectorBeneficiario = csv.GetField(44);
+                    transaction.FechaVencimientoIdBeneficiario = csv.GetField<DateTime>(45);
+                    transaction.FechaUltimaTransaccion = csv.GetField<DateTime>(46);
+    
+    
+                    return transaction;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error parsing Transaction record");
+                    return null;
+                }
+            }
+    
+    
+            private string GetFileType(string fileNameWithoutExtension)
+            {
+                // Extract file type based on the filename pattern
+                string[] parts = fileNameWithoutExtension.Split(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length > 0)
+                {
+                    return parts[0];
+                }
+                return "unknown";
+            } 
+            public static string? GetFechaTransmisionFromFileName(string fileName)
+            {
+                if (string.IsNullOrWhiteSpace(fileName))
+                    return null;
+    
+                string nameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                string[] parts = nameWithoutExtension.Split('_');
+    
+                if (parts.Length < 2 || parts[1].Length != 8)
+                    return null;
+    
+                if (DateTime.TryParseExact(parts[1], "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime fecha))
+                    return fecha.ToString("yyyy/MM/dd");
+    
+                return null;
+            }
+            public static string? GetFechaTrabajoFromFileName(string fileName)
+            {
+                if (string.IsNullOrWhiteSpace(fileName))
+                    return null;
+    
+                string? fechaTransmisionStr = GetFechaTransmisionFromFileName(fileName);
+                if (fechaTransmisionStr == null)
+                    return null;
+    
+                if (DateTime.TryParseExact(fechaTransmisionStr, "yyyy/MM/dd", null, System.Globalization.DateTimeStyles.None, out DateTime fechaTransmision))
+                {
+                    DateTime fechaTrabajo = fechaTransmision.AddDays(-1);
+                    return fechaTrabajo.ToString("yyyy/MM/dd");
+                }
+    
+                return null;
+            }
+    
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\FileParsers\RemesaEfectivaCsvFileParser.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\FileParsers\TextFileParser.cs ---
+    using FileProcessor.Core.Interfaces;
+    using FileProcessor.Core.Models;
+    using FileProcessor.Core.Services;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+    using System.Text.RegularExpressions;
+    
+    namespace FileProcessor.Infrastructure.FileParsers
+    {
+        public class TextFileParser : BaseFileParser, IFileParser
+        {
+            private readonly IConfiguration _configuration;
+            private readonly ILogger<TextFileParser> _logger;
+            private readonly ILogger<ProsaTextFileParser> _prosaLogger;
+            private readonly ProsaPosteoService _prosaPosteoService;
+    
+    
+            public TextFileParser(IConfiguration configuration, ILogger<TextFileParser> logger, ILogger<ProsaTextFileParser> prosaLogger, ProsaPosteoService prosaPosteoService)
+         : base(logger)
+            {
+                _configuration = configuration;
+                _logger = logger;
+                _prosaLogger = prosaLogger;
+                _prosaPosteoService = prosaPosteoService ?? throw new ArgumentNullException(nameof(prosaPosteoService));
+            }
+    
+    
+    
+    
+    
+            //public override async Task<FileParseResult> ParseAsync(string filePath)
+            //{
+            //    var prosaTextFileParser = new ProsaTextFileParser(_configuration, _prosaLogger, _prosaPosteoService);
+            //    return await prosaTextFileParser.ParseAsync(filePath);
+            //}
+    
+    
+            public override bool CanParse(string fileExtension) =>
+         fileExtension.Equals(".txt", StringComparison.OrdinalIgnoreCase);
+    
+    
+            public override async Task<FileParseResult> ParseAsync(string filePath)
+            {
+                var result = new FileParseResult();
+                try
+                {
+                    var lines = await ReadFileLinesAsync(filePath);
+                    // Implementación específica del parsing...
+                    var fileName = Path.GetFileName(filePath);
+    
+                    if (!IsProsaFile(fileName))
+                    {
+                        _logger.LogWarning($"Archivo no válido: {fileName}");
+                        result.Success = false;
+                        result.Message = "El archivo no tiene el formato esperado para Prosa.";
+                        return result;
+                    }
+                    else
+                    {
+                        var prosaTextFileParser = new ProsaTextFileParser(_configuration, _prosaLogger, _prosaPosteoService);
+                        var parseResult = await prosaTextFileParser.ProcessFileAsync(filePath);
+    
+                        if (!parseResult.Success)
+                        {
+                            _logger.LogWarning($"ProsaTextFileParser falló en procesar el archivo: {filePath}. Error: {parseResult.ErrorMessage}");
+                            result.Success = false;
+                            result.Message = parseResult.ErrorMessage;
+                            return result;
+                        }
+                    }
+    
+    
+    
+                    result.Metadata = new FileMetadata
+                    {
+                        FileName = Path.GetFileName(filePath),
+                        FileType = "TXT",
+                        TotalRecords = lines.Length
+                    };
+                    result.Success = true;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error parsing text file");
+                    result.Success = false;
+                    result.Message = ex.Message;
+                }
+                return result;
+            }
+    
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\FileParsers\TextFileParser.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\FileParsers\Bahu\AccountsFileParser.cs ---
+    using FileProcessor.Core.Interfaces;
+    using Microsoft.Data.SqlClient;
+    using Dapper;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Collections.Generic;
+    using System.Data;
+    using Microsoft.Extensions.Logging;
+    using FileProcessor.Core.Models;
+    using FileProcessor.Core.Models.Prosa;
+    using Microsoft.Extensions.Configuration;
+    using System.Globalization;
+    using FileProcessor.Infrastructure.Data.Prosa;
+    using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+    using FileProcessor.Core.Services;
+    
+    namespace FileProcessor.Infrastructure.FileParsers.Bahu
+    {
+        public class AccountsFileParser
+        {
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\FileParsers\Bahu\AccountsFileParser.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\FileParsers\Bahu\AuthorizationsFileParser.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Infrastructure.FileParsers.Bahu
+    {
+        internal class AuthorizationsFileParser
+        {
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\FileParsers\Bahu\AuthorizationsFileParser.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\FileParsers\Bahu\CustomersFileParser.cs ---
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    
+    namespace FileProcessor.Infrastructure.FileParsers.Bahu
+    {
+        internal class CustomersFileParser
+        {
+        }
+    }
+--- Fin del contenido de .\FileProcessor\Infrastructure\FileParsers\Bahu\CustomersFileParser.cs ---
+
+--- Contenido de .\FileProcessor\Infrastructure\Logging\DbLoggerConfigurator.cs ---
+    using Microsoft.Extensions.Configuration;
+    using Serilog;
+    using Serilog.Events;
+    using Serilog.Sinks.MSSqlServer;
+    using System.Collections.Generic;
+    using System.Data;
+    using Serilog.Enrichers; // Para WithThreadId()
+    
+    namespace FileProcessor.Infrastructure.Logging
+    {
+        public static class DbLoggerConfigurator
+        {
+            public static void ConfigureLogger(IConfiguration configuration)
+            {
+                string logPath = Path.Combine(Directory.GetCurrentDirectory(), "logs", "log-.txt");
+                string connectionString = configuration.GetConnectionString("DataBase");
+    
+                var columnOptions = new ColumnOptions
+                {
+                    AdditionalColumns = new List<SqlColumn>
+                    {
+                        new SqlColumn { DataType = SqlDbType.NVarChar, ColumnName = "SourceContext", AllowNull = true },
+                        new SqlColumn { DataType = SqlDbType.NVarChar, ColumnName = "MachineName", AllowNull = true },
+                        new SqlColumn { DataType = SqlDbType.NVarChar, ColumnName = "ProcessName", AllowNull = true },
+                        new SqlColumn { DataType = SqlDbType.Int, ColumnName = "ThreadId", AllowNull = true },
+                        new SqlColumn { DataType = SqlDbType.UniqueIdentifier, ColumnName = "CorrelationId", AllowNull = true }
+                    }
+                };
+    
+                columnOptions.Store.Remove(StandardColumn.Properties);
+                columnOptions.Store.Add(StandardColumn.Properties);
+                columnOptions.Properties.ExcludeAdditionalProperties = false;
+    
+                Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.Information()
+                    .Enrich.FromLogContext()
+                    .Enrich.WithMachineName() // Requiere Serilog.Enrichers.Environment
+                    .Enrich.WithProcessName() // Requiere Serilog.Enrichers.Process
+                    .Enrich.WithThreadId() // Requiere Serilog.Enrichers.Thread
+                    .WriteTo.Console(
+                        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}")
+                    .WriteTo.File(
+                        logPath,
+                        rollingInterval: RollingInterval.Day,
+                        retainedFileCountLimit: 30,
+                        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {SourceContext} {Message}{NewLine}{Exception}",
+                        restrictedToMinimumLevel: LogEventLevel.Information,
+                        shared: true)
+                    .WriteTo.EventLog(
+                        source: "FileProcessorApp",
+                        logName: "Application",
+                        restrictedToMinimumLevel: LogEventLevel.Warning)
+                    .WriteTo.MSSqlServer(
+                        connectionString: connectionString,
+                        sinkOptions: new MSSqlServerSinkOptions
+                        {
+                            TableName = "Logs",
+                            AutoCreateSqlTable = true,
+                            SchemaName = "dbo",
+                            BatchPostingLimit = 50,
+                            BatchPeriod = TimeSpan.FromSeconds(5)
+                        },
+                        columnOptions: columnOptions,
+                        restrictedToMinimumLevel: LogEventLevel.Information)
+                    .CreateLogger();
+            }
+        }
+    }
+    
+    //using Microsoft.Extensions.Configuration;
+    //using Serilog.Events;
+    //using Serilog.Sinks.MSSqlServer;
+    //using Serilog;
+    //using System;
+    //using System.Collections.Generic;
+    //using System.Linq;
+    //using System.Text;
+    //using System.Threading.Tasks;
+    
+    //namespace FileProcessor.Infrastructure.Logging
+    //{
+    //    public static class DbLoggerConfigurator
+    //    {
+    //        public static void ConfigureLogger(IConfiguration configuration)
+    //        {
+    //            string logPath = Path.Combine(Directory.GetCurrentDirectory(), "logs", "log-.txt");
+    //            string connectionString = configuration.GetConnectionString("DefaultConnection");
+    
+    //            Log.Logger = new LoggerConfiguration()
+    //                .WriteTo.Console()
+    //                .WriteTo.File(
+    //                    logPath,
+    //                    rollingInterval: RollingInterval.Day,
+    //                    retainedFileCountLimit: 30,
+    //                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}",
+    //                    restrictedToMinimumLevel: LogEventLevel.Information,
+    //                    shared: true)
+    //                .WriteTo.EventLog(
+    //                    source: "FileProcessorApp",
+    //                    logName: "Application",
+    //                    restrictedToMinimumLevel: LogEventLevel.Warning)
+    //                .WriteTo.MSSqlServer(
+    //                    connectionString: connectionString,
+    //                    sinkOptions: new MSSqlServerSinkOptions
+    //                    {
+    //                        TableName = "Logs",
+    //                        AutoCreateSqlTable = true
+    //                    },
+    //                    restrictedToMinimumLevel: LogEventLevel.Information)
+    //                .CreateLogger();
+    //        }
+    //    }
+    //}
+--- Fin del contenido de .\FileProcessor\Infrastructure\Logging\DbLoggerConfigurator.cs ---
